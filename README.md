@@ -1,3 +1,0 @@
-LPII
-====
-trabalho lpii

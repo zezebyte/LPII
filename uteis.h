@@ -1,10 +1,7 @@
-/* 
- * File:   uteis.h
- * Author: ATP
- *
- * Created on 22 de Abril de 2014, 18:08
+/*
+ Este Vai ser o principal HeaderFile
+ 
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #define STRG 80

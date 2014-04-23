@@ -15,6 +15,7 @@ ApNo TopS(pStack);
 int NewS(pStack);
 ApNo Pop(pStack);
 int Push(pStack, ApNo);
-int SearchCod(pStack, char);
+int SearchCodS(pStack, *char);
+void PrintStack(pStack);
 
 #endif /* STACK_H_ */

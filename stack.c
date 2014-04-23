@@ -33,11 +33,7 @@ int SizeS(pStack pS) {
 }
 
 ApNo TopS(pStack pS) {
-	if(EmptyS(pS)) {
-		return NULL;
-	}else {
-		return pS->top;
-	}
+	return pS->top;
 }
 
 int NewS(pStack pS) {
@@ -46,14 +42,10 @@ int NewS(pStack pS) {
 }
 
 ApNo Pop(pStack pS) {
-	ApNo pN;
-	if(EmptyS(pS)) {
-		return NULL;
-	}else {
-		pN = pS->top;
+	ApNo pN = pS->top;
+	if(!EmptyS(pS))
 		pS->top = pN->next;
-		return pN;
-	}
+	return pN;
 }
 
 int Push(pStack pS, ApNo ch) {
@@ -67,7 +59,12 @@ int Push(pStack pS, ApNo ch) {
 }
 
 int SearchCod(pStack pS, char cod[]){
-    ApNo aux=pS->top;
+	ApNo aux=pS->top;
     
     
 }
+
+void PrintStack(pStack pS){
+	
+}
+

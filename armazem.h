@@ -9,6 +9,7 @@
 #include "types.h"
 
 void InitArm(ApArmazem);
+int ProcuraCodRolo(char, ApArmazem);
 int ProcuraCodPack(char, ApArmazem);
 
 #endif

@@ -6,12 +6,12 @@
  */
 
 
+#include "types.h"
+
+//typedef struct no *ApNo;
 typedef struct no *ApNo;
 
-typedef struct{
-    
-};
-
-typedef struct no{
-    
+typedef struct no {
+	comp elem;
+	ApNo next;
 }No;

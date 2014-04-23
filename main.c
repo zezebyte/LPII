@@ -108,6 +108,7 @@ void Menu(){
                 break;
             default:
                 printf("Erro! Opcao Invalida!\n");
+                Prima();
         }
     }while(op!=0);
 }
@@ -116,5 +117,6 @@ void Menu(){
 int main(int argc, char** argv) {
     
     Menu();
+    Prima();
     return (EXIT_SUCCESS);
 }

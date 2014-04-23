@@ -6,7 +6,10 @@
                    projectFiles="true">
       <itemPath>No.h</itemPath>
       <itemPath>Queue.h</itemPath>
+      <itemPath>nbproject/Rolo.h</itemPath>
       <itemPath>Stacks.h</itemPath>
+      <itemPath>nbproject/pack.h</itemPath>
+      <itemPath>nbproject/packs.h</itemPath>
       <itemPath>uteis.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -48,6 +51,12 @@
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="nbproject/Rolo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="nbproject/pack.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="nbproject/packs.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="uteis.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
@@ -78,6 +87,12 @@
       <item path="Stacks.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="nbproject/Rolo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="nbproject/pack.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="nbproject/packs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="uteis.h" ex="false" tool="3" flavor2="0">
       </item>

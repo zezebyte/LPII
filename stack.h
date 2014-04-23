@@ -1,11 +1,6 @@
 #ifndef STACK_H_
 #define STACK_H_
-#include "No.h"
-
-typedef struct stack* pStack;
-typedef struct stack {
-	ApNo top;
-} Stack;
+#include "types.h"
 
 int EmptyS(pStack);
 int FullS(pStack);

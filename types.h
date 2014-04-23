@@ -1,9 +1,19 @@
-#include "stack.h"
 #define STRG 80
 #define MAX 100
 
-typedef struct armazem *ApArmazem;
-typedef struct no *ApNo;
+typedef struct armazem* ApArmazem;
+typedef struct stack* pStack;
+typedef struct queue* pQueue;
+typedef struct no* ApNo;
+
+typedef struct queue {
+	ApNo head;
+	ApNo tail;
+} Queue;
+
+typedef struct stack {
+	ApNo top;
+} Stack;
 
 typedef struct{
     int dia, mes, ano;

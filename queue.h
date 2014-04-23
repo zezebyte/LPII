@@ -1,13 +1,6 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
-#include "No.h"
-
-typedef struct queue* pQueue;
-
-typedef struct queue {
-	ApNo head;
-	ApNo tail;
-} Queue;
+#include "types.h"
 
 int EmptyQ(pQueue);
 int FullQ(pQueue);

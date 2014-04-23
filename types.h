@@ -1,3 +1,6 @@
+#ifndef _TYPESH_
+#define _TYPESH_
+
 #define STRG 80
 #define MAX 100
 
@@ -5,6 +8,7 @@ typedef struct armazem* ApArmazem;
 typedef struct stack* pStack;
 typedef struct queue* pQueue;
 typedef struct no* ApNo;
+typedef struct rolo comp;
 
 typedef struct queue {
 	ApNo head;
@@ -15,18 +19,18 @@ typedef struct stack {
 	ApNo top;
 } Stack;
 
-typedef struct{
+typedef struct data{
     int dia, mes, ano;
 }Data;
 
-typedef struct{
+typedef struct pack{
     char codigo[7];
     Data data;
     Stack pilharolos;
     int open;
 }Pack;
 
-typedef struct{
+typedef struct rolo{
     char codigo[10], descr[STRG];
     int enc, qualid;
     float comp;
@@ -44,6 +48,4 @@ typedef struct no {
 	ApNo next;
 }No;
 
-typedef Rolo comp;
-
-
+#endif

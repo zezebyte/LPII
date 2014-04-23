@@ -1,5 +1,5 @@
-#ifndef STACK_H_
-#define STACK_H_
+#ifndef _STACKH_
+#define _STACKH_
 #include "types.h"
 
 int EmptyS(pStack);
@@ -10,7 +10,7 @@ ApNo TopS(pStack);
 int NewS(pStack);
 ApNo Pop(pStack);
 int Push(pStack, ApNo);
-int SearchCodS(pStack, *char);
+int SearchCodS(pStack, char*);
 void PrintStack(pStack);
 
-#endif /* STACK_H_ */
+#endif /* _STACKH_ */

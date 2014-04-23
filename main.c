@@ -6,6 +6,9 @@
  */
 
 #include "uteis.h"
+#include "armazem.h"
+#include "queue.h"
+#include "stack.h"
 /*
  * 
  */
@@ -15,6 +18,7 @@ void MenuPacks(){
     char str[STRG];
     
     do{
+    	op = -1;
         limparEcra();
         printf("Menu Packs\n"
                 "\n"
@@ -52,6 +56,7 @@ void MenuRolos(){
     char str[STRG];
     
     do{
+    	op = -1;
         limparEcra();
         printf("Menu Rolos\n"
                 "\n"
@@ -83,6 +88,7 @@ void Menu(){
     char str[STRG];
     
     do{
+    	op = -1;
         limparEcra();
         printf("Programa de Gestao de Empresa de Tecidos\n"
                 "\n"

@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>No.h</itemPath>
+      <itemPath>Queue.h</itemPath>
+      <itemPath>Stacks.h</itemPath>
       <itemPath>uteis.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -37,6 +40,12 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="No.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stacks.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="uteis.h" ex="false" tool="3" flavor2="0">
@@ -62,6 +71,12 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="No.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stacks.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="uteis.h" ex="false" tool="3" flavor2="0">

@@ -118,5 +118,5 @@ int main(int argc, char** argv) {
     
     Menu();
     Prima();
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }

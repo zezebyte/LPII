@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "stack.h"
 
 int EmptyS(pStack pS) {
@@ -58,10 +59,16 @@ int Push(pStack pS, ApNo ch) {
 	}
 }
 
-int SearchCod(pStack pS, char cod[]){
-	ApNo aux=pS->top;
+int SearchCodS(pStack pS, char cod[]){
+    ApNo aux=pS->top;
     
     
+    while(aux!=NULL){
+        if(strcmp(codigo,aux->elem.codigo)==0)
+            return 1; //verdadeiro
+        aux=aux->next;
+    }
+    return 0; //devolve zero se nao encontrar    
 }
 
 void PrintStack(pStack pS){

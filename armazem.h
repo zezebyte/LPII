@@ -16,6 +16,9 @@ void ReceberRolo(pQueue, ApArmazem);
 void AdRoloArm(pQueue, ApArmazem);
 void RemoverRolo(ApArmazem);
 void AlterarRolos(ApArmazem);
+void ListarRolos(ApArmazem);
+void CriarPack(ApArmazem);
+void AdicionarRoloPack(ApArmazem);
 
 
 

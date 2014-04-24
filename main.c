@@ -126,9 +126,6 @@ int main(int argc, char** argv) {
     Queue rolos;
     pQueue ap_rolos=&rolos;
     
-    InitArm(armaz);
-    NewQ(ap_rolos);
-    
     Menu();
     Prima();
     return EXIT_SUCCESS;

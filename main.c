@@ -121,6 +121,13 @@ void Menu(){
 
 
 int main(int argc, char** argv) {
+    Armazem armazem;
+    ApArmazem armaz=&armazem;
+    Queue rolos;
+    pQueue ap_rolos=&rolos;
+    
+    InitArm(armaz);
+    NewQ(ap_rolos);
     
     Menu();
     Prima();

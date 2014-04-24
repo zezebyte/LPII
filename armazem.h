@@ -13,6 +13,11 @@ int ProcuraCodRolo(char, ApArmazem);
 int ProcuraCodPack(char, ApArmazem);
 int ProcuraCodigoRoloEmPacks(ApArmazem, char);
 void ReceberRolo(pQueue, ApArmazem);
+void AdRoloArm(pQueue, ApArmazem);
+void RemoverRolo(ApArmazem);
+void AlterarRolos(ApArmazem);
+
+
 
 
 

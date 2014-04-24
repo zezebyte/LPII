@@ -10,7 +10,7 @@
 
 void InitArm(ApArmazem);
 int ProcuraCodRolo(char, ApArmazem);
-int ProcuraCodPack(char, ApArmazem);
+int ProcuraCodPack(int, ApArmazem);
 int ProcuraCodigoRoloEmPacks(ApArmazem, char);
 void ReceberRolo(pQueue, ApArmazem);
 void AdRoloArm(pQueue, ApArmazem);
@@ -19,7 +19,9 @@ void AlterarRolos(ApArmazem);
 void ListarRolos(ApArmazem);
 void CriarPack(ApArmazem);
 void AdicionarRoloPack(ApArmazem);
-
+void ListarPacks(ApArmazem);
+void EliminarPack(ApArmazem);
+void FecharPack(ApArmazem);
 
 
 

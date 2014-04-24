@@ -24,7 +24,7 @@ typedef struct data{
 }Data;
 
 typedef struct pack{
-    char codigo[7];
+    int codigo;
     Data data;
     Stack pilharolos;
     int open;

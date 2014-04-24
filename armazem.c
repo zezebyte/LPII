@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "armazem.h"
 
 void InitArm(ApArmazem armaz){
@@ -12,7 +13,7 @@ int ProcuraCodRolo(char codigo[], ApArmazem armaz){
     
     while(pos<armaz->cont_rolos && (strcmp(codigo,armaz->rolosarmazem[pos].codigo))!=0)
         pos++;
-    if(pos!=armaz->cont_rolo)s
+    if(pos!=armaz->cont_rolos)
         return pos;
     else
         return -1;
@@ -22,9 +23,9 @@ int ProcuraCodRolo(char codigo[], ApArmazem armaz){
 int ProcuraCodPack(int codigo, ApArmazem armaz){
     int pos=0;
     
-    while(pos<armaz->cont_packs && codigo!=packsarmazem[pos].codigo)
+    while(pos<armaz->cont_packs && codigo!=armaz->packsarmazem[pos].codigo)
         pos++;
-    if(pos!=armaz->cont_packs)s
+    if(pos!=armaz->cont_packs)
         return pos;
     else
         return -1;
@@ -54,7 +55,7 @@ void ReceberRolo(pQueue Rolo, ApArmazem armaz){
         Enqueue(Rolo, aux);
         printf("Rolo introduzido com sucesso!\n");
     }else{
-        printf("Buffer da seccao de acabamentos cheio!\n")
+        printf("Buffer da seccao de acabamentos cheio!\n");
     }
 }
 
@@ -103,7 +104,7 @@ void RemoverRolo(ApArmazem armaz){
     int pos, i;
     
     printf("Inttroduza o codigo do rolo que pretende remover: ");
-    fgets(str, sizeof(str), stdin);
+    fgets(cod, sizeof(cod), stdin);
     pos=ProcuraCodRolo(cod, armaz);
     if(pos!=-1){
         armaz->cont_rolos=armaz->cont_rolos-1;
@@ -184,7 +185,7 @@ void CriarPack(ApArmazem armaz){
     if(aux>999999 && aux<=9999999){
         if(ProcuraCodPack(aux, armaz)==-1){
             armaz->packsarmazem[armaz->cont_packs].codigo=aux;
-            printf("Introduza a data: (2014/04/25): "):
+            printf("Introduza a data: (2014/04/25): ");
             fgets(str, sizeof(str), stdin);
             sscanf(str, "%d%c%d%c%d", &(armaz->packsarmazem[armaz->cont_packs].data.ano), &cd,&(armaz->packsarmazem[armaz->cont_packs].data.mes),&cd, &(armaz->packsarmazem[armaz->cont_packs].data.dia));
             printf("Pack Inserido com sucesso\n");
@@ -202,13 +203,13 @@ void CriarPack(ApArmazem armaz){
 void AdicionarRoloPack(ApArmazem armaz){
     ApNo aux, auxtop;
     int codpack, pospack, posrolo, i;
-    char codrolo[10];
+    char codrolo[10], str[STRG];
     
     printf("Empilhar rolo num pack\n");
     printf("Digite o codigo do pack: ");
     fgets(str, sizeof(str), stdin);
     sscanf(str, "%d", &codpack);
-    if(codpack>999999 && cod<=9999999){
+    if(codpack>999999 && codpack<=9999999){
         pospack=(ProcuraCodPack(codpack,armaz));
         if(pospack!=-1){
             printf("Introduza o codigo do rolo que pretende adicionar: ");
@@ -220,14 +221,14 @@ void AdicionarRoloPack(ApArmazem armaz){
                         if(EmptyS(&armaz->packsarmazem[pospack].pilharolos)==1){
                             Push(&armaz->rolosarmazem[codrolo], &armaz->packsarmazem[pospack].pilharolos);
                             armaz->cont_rolos=armaz->cont_packs-1;
-                            for(i=posrolos;i<armaz->cont_rolos-1; i++){
+                            for(i=posrolo;i<armaz->cont_rolos-1; i++){
                                 armaz->rolosarmazem[i]=armaz->rolosarmazem[i+1];
                             }
                         }else{
-                            auxtop=Top(&armaz->packsarmazem[armaz->cont_packs].pilharolos));
-                            if(armaz->rolosarmazem[posrolos].qualid==auxtop->elem.qualid && armaz->rolosarmazem[posrolos].enc==auxtop->elem.enc){
+                            auxtop=TopS(&armaz->packsarmazem[armaz->cont_packs].pilharolos);
+                            if(armaz->rolosarmazem[posrolo].qualid==auxtop->elem.qualid && armaz->rolosarmazem[posrolo].enc==auxtop->elem.enc){
                                  Push(&armaz->rolosarmazem[codrolo], &armaz->packsarmazem[pospack].pilharolos);
-                                for(i=posrolos;i<armaz->cont_rolos-1; i++){
+                                for(i=posrolo;i<armaz->cont_rolos-1; i++){
                                     armaz->rolosarmazem[i]=armaz->rolosarmazem[i+1];
                                 }
                             }else{

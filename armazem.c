@@ -19,10 +19,10 @@ int ProcuraCodRolo(char codigo[], ApArmazem armaz){
     
 }
 
-int ProcuraCodPack(char codigo[], ApArmazem armaz){
+int ProcuraCodPack(int codigo, ApArmazem armaz){
     int pos=0;
     
-    while(pos<armaz->cont_packs && (strcmp(codigo,armaz->packsarmazem[pos].codigo))!=0)
+    while(pos<armaz->cont_packs && codigo!=packsarmazem[pos].codigo)
         pos++;
     if(pos!=armaz->cont_packs)s
         return pos;
@@ -173,4 +173,81 @@ void ListarRolos(ApArmazem armaz){
     }
 }
 
-
+void CriarPack(ApArmazem armaz){
+    int aux;
+    char str[STRG], cd;
+    
+    printf("Inserir Pack\n");
+    printf("Insira o codigo do pack: ");
+    fgets(str, sizeof(str), stdin);
+    sscanf(str, "%d", &aux);
+    if(aux>999999 && aux<=9999999){
+        if(ProcuraCodPack(aux, armaz)==-1){
+            armaz->packsarmazem[armaz->cont_packs].codigo=aux;
+            printf("Introduza a data: (2014/04/25): "):
+            fgets(str, sizeof(str), stdin);
+            sscanf(str, "%d%c%d%c%d", &(armaz->packsarmazem[armaz->cont_packs].data.ano), &cd,&(armaz->packsarmazem[armaz->cont_packs].data.mes),&cd, &(armaz->packsarmazem[armaz->cont_packs].data.dia));
+            printf("Pack Inserido com sucesso\n");
+            NewS(&armaz->packsarmazem[armaz->cont_packs].pilharolos);
+            armaz->packsarmazem[armaz->cont_packs].open=1;
+            armaz->cont_packs=armaz->cont_packs+1;
+            
+        }else{
+            printf("Esse codigo ja foi atribuido a outro pack\n");
+        }
+    }else{
+        printf("O codigo digitado é invalido\n");
+    }
+}
+void AdicionarRoloPack(ApArmazem armaz){
+    ApNo aux, auxtop;
+    int codpack, pospack, posrolo, i;
+    char codrolo[10];
+    
+    printf("Empilhar rolo num pack\n");
+    printf("Digite o codigo do pack: ");
+    fgets(str, sizeof(str), stdin);
+    sscanf(str, "%d", &codpack);
+    if(codpack>999999 && cod<=9999999){
+        pospack=(ProcuraCodPack(codpack,armaz));
+        if(pospack!=-1){
+            printf("Introduza o codigo do rolo que pretende adicionar: ");
+            fgets(codrolo, sizeof(codrolo), stdin);
+            if(strlen(codrolo)<11){
+                posrolo=ProcuraCodRolo(codrolo, armaz);
+                if(posrolo!=-1){
+                    if(armaz->packsarmazem[codpack].open==1){
+                        if(EmptyS(&armaz->packsarmazem[pospack].pilharolos)==1){
+                            Push(&armaz->rolosarmazem[codrolo], &armaz->packsarmazem[pospack].pilharolos);
+                            armaz->cont_rolos=armaz->cont_packs-1;
+                            for(i=posrolos;i<armaz->cont_rolos-1; i++){
+                                armaz->rolosarmazem[i]=armaz->rolosarmazem[i+1];
+                            }
+                        }else{
+                            auxtop=Top(&armaz->packsarmazem[armaz->cont_packs].pilharolos));
+                            if(armaz->rolosarmazem[posrolos].qualid==auxtop->elem.qualid && armaz->rolosarmazem[posrolos].enc==auxtop->elem.enc){
+                                 Push(&armaz->rolosarmazem[codrolo], &armaz->packsarmazem[pospack].pilharolos);
+                                for(i=posrolos;i<armaz->cont_rolos-1; i++){
+                                    armaz->rolosarmazem[i]=armaz->rolosarmazem[i+1];
+                                }
+                            }else{
+                                printf("O rolo nao pode ser empilhado neste pack!\n");
+                            }
+                            
+                        }
+                    }else{
+                        printf("Nao pode inserir mais rolos o pack ja esta fechado!\n");
+                    }
+                }else{
+                    printf("O rolo que pretende empilhar nao existe!\n");
+                }
+            }else{
+                printf("O codigo enserido esta incorreto!\n");
+            }
+        }else{
+            printf("Esse pack nao existe!\n");
+        }
+    }else{
+        printf("O codigo inserido esta incorreto!\n");
+    }
+}

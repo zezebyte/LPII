@@ -155,3 +155,22 @@ void AlterarRolos(ApArmazem armaz){
         printf("Nao há rolos para alterar!\n");
     }
 }
+void ListarRolos(ApArmazem armaz){
+    int i;
+    
+    printf("Listar Rolos no armazem\n");
+    for(i=0; i<armaz->cont_rolos; i++){
+        printf("Codigo do Rolo: %s\n", armaz->rolosarmazem[i].codigo);
+        printf("Descricao: %s\n", armaz->rolosarmazem[i].descr);
+        printf("Comprimento: %.2f\n", armaz->rolosarmazem[i].comp);
+        printf("Qualidade: %d\n", armaz->rolosarmazem[i].qualid);
+        printf("Encomenda: %d\n", armaz->rolosarmazem[i].enc);  
+    }
+    for(i=0; i<armaz->cont_packs-1; i++){
+        if(SizeS(&(armaz->packsarmazem[i].pilharolos))>0){
+            PrintStack(&&(armaz->packsarmazem[i].pilharolos));
+        }
+    }
+}
+
+

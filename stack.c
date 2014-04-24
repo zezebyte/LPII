@@ -64,7 +64,7 @@ int SearchCodS(pStack pS, char cod[]){
     
     
     while(aux!=NULL){
-        if(strcmp(codigo,aux->elem.codigo)==0)
+        if(strcmp(cod,aux->elem.codigo)==0)
             return 1; //verdadeiro
         aux=aux->next;
     }
@@ -74,13 +74,13 @@ int SearchCodS(pStack pS, char cod[]){
 void PrintStack(pStack pS){
     ApNo ApN=pS->top;
     
-    if(EmptyS(ApS)==0){
+    if(EmptyS(pS)==0){
         while(ApN->next!=NULL){
-            printf("Codigo do Rolo: %s\n", armaz->rolosarmazem[i].codigo);
-            printf("Descricao: %s\n", armaz->rolosarmazem[i].descr);
-            printf("Comprimento: %.2f\n", armaz->rolosarmazem[i].comp);
-            printf("Qualidade: %d\n", armaz->rolosarmazem[i].qualid);
-            printf("Encomenda: %d\n", armaz->rolosarmazem[i].enc); 
+            printf("Codigo do Rolo: %s\n", ApN->elem.codigo);
+            printf("Descricao: %s\n", ApN->elem.descr);
+            printf("Comprimento: %.2f\n",ApN->elem.comp);
+            printf("Qualidade: %d\n", ApN->elem.qualid);
+            printf("Encomenda: %d\n", ApN->elem.enc);
             ApN=ApN->next;
         }
     }

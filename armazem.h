@@ -4,16 +4,16 @@
  *
  * Created on 23 de Abril de 2014, 14:02
  */
-#ifndef _ARMAZEMH_
-#define _ARMAZEMH_
+#ifndef ARMAZEM_H_
+#define ARMAZEM_H_
 #include "types.h"
 
 void InitArm(ApArmazem);
-int ProcuraCodRolo(char, ApArmazem);
-int ProcuraCodPack(int, ApArmazem);
-int ProcuraCodigoRoloEmPacks(ApArmazem, char);
-void ReceberRolo(pQueue, ApArmazem);
-void AdRoloArm(pQueue, ApArmazem);
+int ProcuraCodRolo(ApArmazem, char*);
+int ProcuraCodPack(ApArmazem, int);
+int ProcuraCodigoRoloEmPacks(ApArmazem, char*);
+void ReceberRolo(ApArmazem, pQueue);
+void AdRoloArm(ApArmazem, pQueue);
 void RemoverRolo(ApArmazem);
 void AlterarRolos(ApArmazem);
 void ListarRolos(ApArmazem);
@@ -22,8 +22,5 @@ void AdicionarRoloPack(ApArmazem);
 void ListarPacks(ApArmazem);
 void EliminarPack(ApArmazem);
 void FecharPack(ApArmazem);
-
-
-
 
 #endif

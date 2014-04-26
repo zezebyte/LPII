@@ -42,8 +42,7 @@ int NewS(pStack pS) {
 
 ApNo Pop(pStack pS) {
 	ApNo pN = pS->top;
-	if(!EmptyS(pS))
-		pS->top = pN->next;
+	if(!EmptyS(pS)) pS->top = pN->next;
 	return pN;
 }
 
@@ -57,29 +56,27 @@ int Push(pStack pS, ApNo ch) {
 	}
 }
 
-int SearchCodS(pStack pS, char cod[]){
-    ApNo aux=pS->top;
-    
-    
-    while(aux!=NULL){
-        if(strcmp(cod,aux->elem.codigo)==0)
-            return 1; //verdadeiro
-        aux=aux->next;
-    }
-    return 0; //devolve zero se nao encontrar    
+int SearchCodS(pStack pS, char* cod) {
+	ApNo aux = pS->top;
+
+	while(aux != NULL) {
+		if(strcmp(cod, aux->elem.codigo) == 0) return 1;       //encontrou um codigo igual
+		aux = aux->next;
+	}
+	return 0;       //nao encontrou
 }
 
-void PrintStack(pStack pS){
-    ApNo ApN=pS->top;
-    
-    if(!EmptyS(pS)){
-        while(ApN->next!=NULL){
-            printf("Codigo do Rolo: %s\n", ApN->elem.codigo);
-            printf("Descricao: %s\n", ApN->elem.descr);
-            printf("Comprimento: %.2f\n",ApN->elem.comp);
-            printf("Qualidade: %d\n", ApN->elem.qualid);
-            printf("Encomenda: %d\n\n", ApN->elem.enc);
-            ApN=ApN->next;
-        }
-    }
+void PrintStack(pStack pS) {
+	ApNo ApN = pS->top;
+
+	if(!EmptyS(pS)) {
+		while(ApN->next != NULL) {
+			printf("Codigo do Rolo: %s\n", ApN->elem.codigo);
+			printf("Descricao: %s\n", ApN->elem.descr);
+			printf("Comprimento: %.2f\n", ApN->elem.comp);
+			printf("Qualidade: %d\n", ApN->elem.qualid);
+			printf("Encomenda: %d\n\n", ApN->elem.enc);
+			ApN = ApN->next;
+		}
+	}
 }

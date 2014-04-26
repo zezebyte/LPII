@@ -2,8 +2,8 @@
  Este Vai ser o principal HeaderFile
  
  */
-#ifndef _UTEISH_
-#define _UTEISH_
+#ifndef UTEIS_H_
+#define UTEIS_H_
 
 #include <stdio.h>
 #include <stdlib.h>

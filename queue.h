@@ -1,5 +1,5 @@
-#ifndef _QUEUEH_
-#define _QUEUEH_
+#ifndef QUEUE_H_
+#define QUEUE_H_
 #include "types.h"
 
 int EmptyQ(pQueue);

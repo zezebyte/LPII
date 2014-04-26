@@ -1,5 +1,5 @@
-#ifndef _STACKH_
-#define _STACKH_
+#ifndef STACK_H_
+#define STACK_H_
 #include "types.h"
 
 int EmptyS(pStack);

@@ -1,5 +1,5 @@
-#ifndef _TYPESH_
-#define _TYPESH_
+#ifndef TYPES_H_
+#define TYPES_H_
 
 #define STRG 80
 #define MAX 100

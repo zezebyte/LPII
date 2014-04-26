@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "queue.h"
+#include "stack.h"
 #include "armazem.h"
 
 void InitArm(ApArmazem armaz) {
@@ -32,7 +34,7 @@ int ProcuraCodigoRoloEmPacks(ApArmazem armaz, char* codigo) {
 	int i;
 
 	for(i = 0; i < armaz->cont_packs - 1; i++) {
-		if(SearchCodS(&(armaz->packsarmazem[i]), codigo)) return 1;
+		if(SearchCodS(&(armaz->packsarmazem[i].pilharolos), codigo)) return 1;
 	}
 	return 0;
 }
@@ -48,7 +50,7 @@ void ReceberRolo(ApArmazem armaz, pQueue Rolo) {
 		fgets(aux->elem.descr, sizeof(aux->elem.descr), stdin);
 		printf("Introduza a encomenda do porduto: ");
 		fgets(str, sizeof(str), stdin);
-		sscanf(str, "%d", aux->elem.enc);
+		sscanf(str, "%d", &(aux->elem.enc));
 		Enqueue(Rolo, aux);
 		printf("Rolo introduzido com sucesso!\n");
 	}else {
@@ -69,7 +71,7 @@ void AdRoloArm(ApArmazem armaz, pQueue ap_queue) {
 				strcpy(aux->elem.codigo, str);
 				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
-				sscanf(str, "%f", aux->elem.comp);
+				sscanf(str, "%f", &(aux->elem.comp));
 				if(aux->elem.comp > 0.0) {
 					printf("Introduza a qualidade do rolo: ");
 					fgets(str, sizeof(str), stdin);
@@ -79,19 +81,18 @@ void AdRoloArm(ApArmazem armaz, pQueue ap_queue) {
 					armaz->cont_rolos = armaz->cont_rolos + 1;
 					printf("Rolo adicionado ao armazem com sucesso\n");
 				}else {
-					Enqueue(aux, ap_queue);
+					Enqueue(ap_queue, aux);
 					printf("Os rolos tem que ter o comprimento positivo!\n");
 				}
 			}else {
-				Enqueue(aux, ap_queue);
+				Enqueue(ap_queue, aux);
 				printf("Já existe um rolo com esse codigo!\n");
 			}
 		}else {
-			Enqueue(aux, ap_queue);
+			Enqueue(ap_queue, aux);
 			printf("O codigo so pode ter ate 10 caracteres!\n");
 		}
 	}else {
-		Enqueue(aux, ap_queue);
 		printf("Nao ha rolos para adicionar!\n");
 	}
 }
@@ -136,7 +137,7 @@ void AlterarRolos(ApArmazem armaz) {
 					scanf(str, "%d", &(armaz->rolosarmazem[ind].qualid));
 					printf("Introduza a descricao do produto: ");
 					fgets(armaz->rolosarmazem[ind].descr, sizeof(armaz->rolosarmazem[ind].descr),
-						stdin);
+					stdin);
 					printf("Introduza a encomenda do produto: ");
 					fgets(str, sizeof(str), stdin);
 					scanf(str, "%d", &(armaz->rolosarmazem[ind].enc));
@@ -218,10 +219,11 @@ void AdicionarRoloPack(ApArmazem armaz) {
 			if(strlen(codrolo) < 11) {
 				posrolo = ProcuraCodRolo(armaz, codrolo);
 				if(posrolo != -1) {
-					if(armaz->packsarmazem[codpack].open == 1) {
-						if(EmptyS(&armaz->packsarmazem[pospack].pilharolos) == 1) {
-							Push(&armaz->rolosarmazem[codrolo],
-								(&armaz->packsarmazem[pospack].pilharolos));
+					if(armaz->packsarmazem[pospack].open == 1) {
+						if(EmptyS(&(armaz->packsarmazem[pospack].pilharolos)) == 1) {
+							aux = malloc(sizeof(No));
+							aux->elem = armaz->rolosarmazem[posrolo];
+							Push(&(armaz->packsarmazem[pospack].pilharolos), aux);
 							armaz->cont_rolos = armaz->cont_packs - 1;
 							for(i = posrolo; i < armaz->cont_rolos - 1; i++) {
 								armaz->rolosarmazem[i] = armaz->rolosarmazem[i + 1];
@@ -229,16 +231,17 @@ void AdicionarRoloPack(ApArmazem armaz) {
 						}else {
 							auxtop = TopS(&armaz->packsarmazem[armaz->cont_packs].pilharolos);
 							if(armaz->rolosarmazem[posrolo].qualid == auxtop->elem.qualid && armaz->rolosarmazem[posrolo].enc == auxtop->elem.enc) {
-								Push(&armaz->rolosarmazem[codrolo],
-									&armaz->packsarmazem[pospack].pilharolos);
+								aux = malloc(sizeof(No));
+								aux->elem = armaz->rolosarmazem[posrolo];
+								Push(&(armaz->packsarmazem[pospack].pilharolos), aux);
 								for(i = posrolo; i < armaz->cont_rolos - 1; i++) {
 									armaz->rolosarmazem[i] = armaz->rolosarmazem[i + 1];
 								}
 							}else {
 								printf("O rolo nao pode ser empilhado neste pack!\n");
 							}
-
 						}
+						printf("Rolo empilhado no pack com sucesso!\n");
 					}else {
 						printf("Nao pode inserir mais rolos o pack ja esta fechado!\n");
 					}
@@ -263,13 +266,13 @@ void ListarPacks(ApArmazem armaz) {
 		printf("\nCodigo do pack: %d\n", armaz->packsarmazem[i].codigo);
 		printf("Data de Criacao: %d-%d-%d\n", armaz->packsarmazem[i].data.ano,
 			armaz->packsarmazem[i].data.mes, armaz->packsarmazem[i].data.dia);
-
 	}
 }
 
 void EliminarPack(ApArmazem armaz) {
 	int codpack, pospack, i;
 	char str[STRG];
+	ApNo apn;
 
 	printf("Apagar um pack\n");
 	printf("Digite o codigo do pack a remover: ");
@@ -279,8 +282,9 @@ void EliminarPack(ApArmazem armaz) {
 		pospack = ProcuraCodPack(armaz, codpack);
 		if(pospack != -1) {
 			while(EmptyS(&armaz->packsarmazem[pospack].pilharolos) == 0) {
-				armaz->rolosarmazem[armaz->cont_rolos] = Pop(
-					&armaz->packsarmazem[pospack].pilharolos);
+				apn = Pop(&(armaz->packsarmazem[pospack].pilharolos));
+				armaz->rolosarmazem[armaz->cont_rolos] = apn->elem;
+				free(apn);
 				armaz->cont_rolos = armaz->cont_rolos + 1;
 			}
 			armaz->cont_packs = armaz->cont_packs - 1;
@@ -318,5 +322,4 @@ void FecharPack(ApArmazem armaz) {
 	}else {
 		printf("O codigo digitado nao esta correto!\n");
 	}
-
 }

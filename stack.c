@@ -13,7 +13,7 @@ int FullS(pStack pS) {
 }
 
 void ClearS(pStack pS) {
-	while(!Empty(pS)) {
+	while(!EmptyS(pS)) {
 		free(Pop(pS));
 	}
 }

@@ -13,16 +13,8 @@ int FullQ(pQueue pQ) {
 }
 
 void ClearQ(pQueue pQ) {
-	ApNo pQN = pQ->head;
 	if(!EmptyQ(pQ)) {
-		while(pQN != pQ->tail) {
-			pQ->head = pQN->next;
-			free(pQN);
-			pQN = pQ->head;
-		}
-		free(pQN);
-		pQ->head = NULL;
-		pQ->tail = NULL;
+		free(Dequeue(pQ));
 	}
 }
 

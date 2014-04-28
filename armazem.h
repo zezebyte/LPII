@@ -22,5 +22,7 @@ void AdicionarRoloPack(ApArmazem);
 void ListarPacks(ApArmazem);
 void EliminarPack(ApArmazem);
 void FecharPack(ApArmazem);
+int daysinmonth(int, int);
+int validDate(int, int, int);
 
 #endif

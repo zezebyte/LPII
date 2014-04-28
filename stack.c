@@ -71,11 +71,11 @@ void PrintStack(pStack pS) {
 
 	if(!EmptyS(pS)) {
 		while(ApN->next != NULL) {
-			printf("Codigo do Rolo: %s\n", ApN->elem.codigo);
+			printf("Rolo %s\n", ApN->elem.codigo);
 			printf("Descricao: %s\n", ApN->elem.descr);
 			printf("Comprimento: %.2f\n", ApN->elem.comp);
 			printf("Qualidade: %d\n", ApN->elem.qualid);
-			printf("Encomenda: %d\n\n", ApN->elem.enc);
+			printf("Encomenda: %d\n", ApN->elem.enc);
 			ApN = ApN->next;
 		}
 	}

@@ -11,9 +11,6 @@
 #include "armazem.h"
 #include "queue.h"
 #include "stack.h"
-/*
- * 
- */
 
 void MenuPacks(ApArmazem armaz) {
 	int op;
@@ -128,11 +125,12 @@ void Menu(ApArmazem armaz, pQueue filaEspera) {
 			break;
 		case 0:
 			printf("Saiu do Programa\n");
+			Prima();
 			break;
 		default:
 			printf("Erro! Opcao Invalida!\n");
+			Prima();
 		}
-		Prima();
 	}while(op != 0);
 }
 
@@ -141,6 +139,8 @@ int main(int argc, char** argv) {
 	ApArmazem armaz = &armazem;
 	Queue rolos;
 	pQueue ap_rolos = &rolos;
+
+	setbuf(stdout, NULL);
 
 	InitArm(armaz);
 	NewQ(ap_rolos);

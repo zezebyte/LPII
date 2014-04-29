@@ -71,7 +71,7 @@ void PrintStack(pStack pS) {
 		printf("Descricao: %s\n", ApN->elem.descr);
 		printf("Comprimento: %.2f\n", ApN->elem.comp);
 		printf("Qualidade: %d\n", ApN->elem.qualid);
-		printf("Encomenda: %d\n", ApN->elem.enc);
+		printf("Encomenda: %d\n\n", ApN->elem.enc);
 		ApN = ApN->next;
 	}
 }

@@ -67,6 +67,8 @@ void AdRoloArm(ApArmazem armaz, pQueue ap_queue) {
 
 	if(EmptyQ(ap_queue) == 0) {
 		aux = Dequeue(ap_queue);
+		printf("Descricao do rolo: %s ", aux->elem.descr);
+		printf("Encomenda do rolo: %d ", aux->elem.enc);
 		printf("Introduza o codigo do Rolo: ");
 		fgets(str, sizeof(str), stdin);
 		str[strlen(str) - 1] = '\0';
@@ -111,9 +113,10 @@ void RemoverRolo(ApArmazem armaz) {
 
 	printf("Introduza o codigo do rolo que pretende remover: ");
 	fgets(cod, sizeof(cod), stdin);
+	cod[strlen(cod) - 1] = '\0';
 	pos = ProcuraCodRolo(armaz, cod);
 	if(pos != -1) {
-		armaz->cont_rolos = armaz->cont_rolos - 1;
+		--armaz->cont_rolos;
 		for(i = pos; i < armaz->cont_rolos; ++i) {
 			armaz->rolosarmazem[i] = armaz->rolosarmazem[i + 1];
 		}
@@ -144,7 +147,7 @@ void AlterarRolos(ApArmazem armaz) {
 
 					printf("Introduza a qualidade do rolo (%d): ", armaz->rolosarmazem[ind].qualid);
 					fgets(str, sizeof(str), stdin);
-					scanf(str, "%d", &tmp);
+					sscanf(str, "%d", &tmp);
 					armaz->rolosarmazem[ind].qualid = tmp;
 
 					printf("Introduza a descricao do produto (%s): ",
@@ -155,7 +158,7 @@ void AlterarRolos(ApArmazem armaz) {
 
 					printf("Introduza a encomenda do produto (%d): ", armaz->rolosarmazem[ind].enc);
 					fgets(str, sizeof(str), stdin);
-					scanf(str, "%d", &tmp);
+					sscanf(str, "%d", &tmp);
 					armaz->rolosarmazem[ind].enc = tmp;
 
 					printf("Rolo editado com sucesso!\n");
@@ -286,12 +289,12 @@ void AdicionarRoloPack(ApArmazem armaz) {
 							}
 							printf("Rolo empilhado no pack com sucesso!\n");
 						}else {
-							auxtop = TopS(&armaz->packsarmazem[armaz->cont_packs].pilharolos);
+							auxtop = TopS(&(armaz->packsarmazem[pospack].pilharolos));
 							if(armaz->rolosarmazem[posrolo].qualid == auxtop->elem.qualid && armaz->rolosarmazem[posrolo].enc == auxtop->elem.enc) {
 								aux = malloc(sizeof(No));
 								aux->elem = armaz->rolosarmazem[posrolo];
 								Push(&(armaz->packsarmazem[pospack].pilharolos), aux);
-								for(i = posrolo; i < armaz->cont_rolos; ++i) {
+								for(i = posrolo; i < armaz->cont_rolos - 1; ++i) {
 									armaz->rolosarmazem[i] = armaz->rolosarmazem[i + 1];
 								}
 								printf("Rolo empilhado no pack com sucesso!\n");
@@ -332,7 +335,7 @@ void ListarPacks(ApArmazem armaz) {
 	}
 }
 
-void EliminarPack(ApArmazem armaz) {
+void RemoverPack(ApArmazem armaz) {
 	int codpack, pospack, i;
 	char str[STRG];
 	ApNo apn;

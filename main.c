@@ -34,7 +34,7 @@ void MenuPacks(ApArmazem armaz) {
 			AdicionarRoloPack(armaz);
 			break;
 		case 3:
-			EliminarPack(armaz);
+			RemoverPack(armaz);
 			break;
 		case 4:
 			ListarPacks(armaz);

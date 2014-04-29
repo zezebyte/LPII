@@ -11,4 +11,4 @@ int NewQ(pQueue);
 ApNo Dequeue(pQueue);
 int Enqueue(pQueue, ApNo);
 
-#endif /* _QUEUEH_ */
+#endif /* QUEUE_H_ */

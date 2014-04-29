@@ -48,4 +48,4 @@ typedef struct no {
 	ApNo next;
 }No;
 
-#endif
+#endif	/* TYPES_H_ */

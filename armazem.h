@@ -1,9 +1,3 @@
-/* 
- * File:   armazem.h
- * Author: sos
- *
- * Created on 23 de Abril de 2014, 14:02
- */
 #ifndef ARMAZEM_H_
 #define ARMAZEM_H_
 #include "types.h"
@@ -25,4 +19,4 @@ void FecharPack(ApArmazem);
 int daysinmonth(int, int);
 int validDate(int, int, int);
 
-#endif
+#endif	/* ARMAZEM_H_ */

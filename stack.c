@@ -21,12 +21,9 @@ void ClearS(pStack pS) {
 int SizeS(pStack pS) {
 	int i = 0;
 	ApNo pN = pS->top;
-	if(!EmptyS(pS)) {
+	while(pN != NULL) {
+		pN = pN->next;
 		++i;
-		while(pN->next != NULL) {
-			pN = pN->next;
-			++i;
-		}
 	}
 	return i;
 }
@@ -69,14 +66,12 @@ int SearchCodS(pStack pS, char* cod) {
 void PrintStack(pStack pS) {
 	ApNo ApN = pS->top;
 
-	if(!EmptyS(pS)) {
-		while(ApN->next != NULL) {
-			printf("Rolo %s\n", ApN->elem.codigo);
-			printf("Descricao: %s\n", ApN->elem.descr);
-			printf("Comprimento: %.2f\n", ApN->elem.comp);
-			printf("Qualidade: %d\n", ApN->elem.qualid);
-			printf("Encomenda: %d\n", ApN->elem.enc);
-			ApN = ApN->next;
-		}
+	while(ApN != NULL) {
+		printf("Rolo %s\n", ApN->elem.codigo);
+		printf("Descricao: %s\n", ApN->elem.descr);
+		printf("Comprimento: %.2f\n", ApN->elem.comp);
+		printf("Qualidade: %d\n", ApN->elem.qualid);
+		printf("Encomenda: %d\n", ApN->elem.enc);
+		ApN = ApN->next;
 	}
 }

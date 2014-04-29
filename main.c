@@ -1,9 +1,3 @@
-/* 
- * File:   main.c
- * Author: ATP
- *
- * Created on 22 de Abril de 2014, 17:57
- */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -31,6 +25,7 @@ void MenuPacks(ApArmazem armaz) {
 			"Opcao: ");
 		fgets(str, sizeof(str), stdin);
 		sscanf(str, "%d", &op);
+		limparEcra();
 		switch(op) {
 		case 1:
 			CriarPack(armaz);
@@ -74,6 +69,7 @@ void MenuRolos(ApArmazem armaz, pQueue filaEspera) {
 			"Opcao: ");
 		fgets(str, sizeof(str), stdin);
 		sscanf(str, "%d", &op);
+		limparEcra();
 		switch(op) {
 		case 1:
 			AdRoloArm(armaz, filaEspera);
@@ -113,6 +109,7 @@ void Menu(ApArmazem armaz, pQueue filaEspera) {
 			"Opcao: ");
 		fgets(str, sizeof(str), stdin);
 		sscanf(str, "%d", &op);
+		limparEcra();
 		switch(op) {
 		case 1:
 			ReceberRolo(armaz, filaEspera);
@@ -124,7 +121,12 @@ void Menu(ApArmazem armaz, pQueue filaEspera) {
 			MenuPacks(armaz);
 			break;
 		case 0:
-			printf("Saiu do Programa\n");
+			printf("A sair do programa.");
+			sleep(500);
+			printf(".");
+			sleep(500);
+			printf(".");
+			sleep(500);
 			Prima();
 			break;
 		default:

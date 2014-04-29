@@ -13,4 +13,4 @@ int Push(pStack, ApNo);
 int SearchCodS(pStack, char*);
 void PrintStack(pStack);
 
-#endif /* _STACKH_ */
+#endif /* STACK_H_ */

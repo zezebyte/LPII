@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "queue.h"
 
-
 int EmptyQ(pQueue pQ) {
 	if(pQ->head == NULL) return 1;
 	return 0;

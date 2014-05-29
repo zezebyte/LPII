@@ -2,15 +2,15 @@
 #define STACK_H_
 #include "types.h"
 
-int EmptyS(pStack);
-int FullS(pStack);
-void ClearS(pStack);
-int SizeS(pStack);
-ApNo TopS(pStack);
-int NewS(pStack);
-ApNo Pop(pStack);
-int Push(pStack, ApNo);
-int SearchCodS(pStack, char*);
-void PrintStack(pStack);
+int EmptyS(ApStack);
+int FullS(ApStack);
+void ClearS(ApStack);
+int SizeS(ApStack);
+ApNo TopS(ApStack);
+int NewS(ApStack);
+ApNo Pop(ApStack);
+int Push(ApStack, ApNo);
+int SearchCodS(ApStack, char*);
+void PrintStack(ApStack);
 
 #endif /* STACK_H_ */

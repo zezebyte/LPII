@@ -2,13 +2,15 @@
 #define TYPES_H_
 
 #define STRG 80
-#define MAX 100
+#define MAXSTACK 0
+#define MAXQUEUE 20
+#define MAXLLIST 0
 
+typedef struct linkedlist* ApLista;
 typedef struct armazem* ApArmazem;
-typedef struct stack* pStack;
-typedef struct queue* pQueue;
+typedef struct stack* ApStack;
+typedef struct queue* ApQueue;
 typedef struct no* ApNo;
-typedef struct rolo comp;
 
 typedef struct queue {
 	ApNo head;
@@ -19,33 +21,55 @@ typedef struct stack {
 	ApNo top;
 } Stack;
 
-typedef struct data{
-    int dia, mes, ano;
-}Data;
+typedef struct linkedlist {
+	ApNo head;
+	int cont;
+} LinkedList;
 
-typedef struct pack{
-    int codigo;
-    Data data;
-    Stack pilharolos;
-    int open;
-}Pack;
+typedef struct data {
+	int dia, mes, ano;
+} Data;
 
-typedef struct rolo{
-    char codigo[10], descr[STRG];
-    int enc, qualid;
-    float comp;
-}Rolo;
+typedef struct guia {
+	int num, cliente;
+	LinkedList expds;
+} Guia;
 
-typedef struct armazem{
-    Rolo rolosarmazem[MAX];
-    Pack packsarmazem[MAX];
-    int cont_rolos;
-    int cont_packs;
-}Armazem;
+typedef struct expedicao {
+	int enc, open;
+	LinkedList packs;
+} Expd;
+
+typedef struct pack {
+	int codigo;
+	Data data;
+	Stack pilharolos;
+	int open;
+} Pack;
+
+typedef struct rolo {
+	char codigo[10], descr[STRG];
+	int enc, qualid;
+	float comp;
+} Rolo;
+
+typedef struct armazem {
+	LinkedList rolos;
+	LinkedList packs;
+	LinkedList expds;
+	LinkedList guias;
+} Armazem;
+
+typedef union componente {
+	Rolo rolo;
+	Pack pack;
+	Expd expd;
+	Guia guia;
+} comp;
 
 typedef struct no {
 	comp elem;
 	ApNo next;
-}No;
+} No;
 
 #endif	/* TYPES_H_ */

@@ -2,22 +2,25 @@
 #include <stdlib.h>
 #include "queue.h"
 
-int EmptyQ(pQueue pQ) {
+int EmptyQ(ApQueue pQ) {
 	if(pQ->head == NULL) return 1;
 	return 0;
 }
 
-int FullQ(pQueue pQ) {
-	return 0;
+int FullQ(ApQueue pQ) {
+	if(MAXQUEUE == 0)
+		return 0;
+	else if(SizeQ(pQ) < MAXQUEUE) return 0;
+	return 1;
 }
 
-void ClearQ(pQueue pQ) {
+void ClearQ(ApQueue pQ) {
 	if(!EmptyQ(pQ)) {
 		free(Dequeue(pQ));
 	}
 }
 
-int SizeQ(pQueue pQ) {
+int SizeQ(ApQueue pQ) {
 	int i = 0;
 	ApNo pQN = pQ->head;
 	if(pQN != NULL) {
@@ -30,17 +33,17 @@ int SizeQ(pQueue pQ) {
 	return i;
 }
 
-ApNo FrontQ(pQueue pQ) {
+ApNo FrontQ(ApQueue pQ) {
 	return pQ->head;
 }
 
-int NewQ(pQueue pQ) {
+int NewQ(ApQueue pQ) {
 	pQ->head = NULL;
 	pQ->tail = NULL;
 	return 1;
 }
 
-ApNo Dequeue(pQueue pQ) {
+ApNo Dequeue(ApQueue pQ) {
 	ApNo pQN = pQ->head;
 
 	if(pQ->head == pQ->tail) {
@@ -53,7 +56,7 @@ ApNo Dequeue(pQueue pQ) {
 	return pQN;
 }
 
-int Enqueue(pQueue pQ, ApNo x) {
+int Enqueue(ApQueue pQ, ApNo x) {
 	if(FullQ(pQ)) {
 		return 0;
 	}else {

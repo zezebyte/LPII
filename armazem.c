@@ -4,42 +4,105 @@
 #include <windows.h>
 #include "queue.h"
 #include "stack.h"
+#include "linkedList.h"
 #include "armazem.h"
 
 void InitArm(ApArmazem armaz) {
-	armaz->cont_packs = 0;
-	armaz->cont_rolos = 0;
+	NewL(&(armaz->rolos));
+	NewL(&(armaz->packs));
+	NewL(&(armaz->expds));
+	NewL(&(armaz->guias));
 }
 
 int ProcuraCodRolo(ApArmazem armaz, char* codigo) {
-	int pos = 0;
+	int pos = 0, lim = SizeL(&(armaz->rolos));
+	ApNo pNR = armaz->rolos.head;
 
-	while(pos < armaz->cont_rolos && (strcmp(codigo, armaz->rolosarmazem[pos].codigo)) != 0)
-		pos++;
-	if(pos != armaz->cont_rolos)
-		return pos;
-	else return -1;
-}
-
-int ProcuraCodPack(ApArmazem armaz, int codigo) {
-	int pos = 0;
-
-	while(pos < armaz->cont_packs && codigo != armaz->packsarmazem[pos].codigo)
+	while(pos < lim && strcmp(pNR->elem.rolo.codigo, codigo)) {
+		pNR = pNR->next;
 		++pos;
-	if(pos != armaz->cont_packs)
-		return pos;
-	else return -1;
+	}
+	if(pos == lim) return -1;
+	return pos;
 }
-int ProcuraCodigoRoloEmPacks(ApArmazem armaz, char* codigo) {
-	int i;
 
-	for(i = 0; i < armaz->cont_packs; ++i) {
-		if(SearchCodS(&(armaz->packsarmazem[i].pilharolos), codigo)) return 1;
+int ProcuraCodRoloPacks(ApArmazem armaz, char* codigo) {
+	ApNo pNP = armaz->packs.head;
+
+	while(!pNP) {
+		if(SearchCodS(&(pNP->elem.pack.pilharolos), codigo)) return 1;
+		pNP = pNP->next;
 	}
 	return 0;
 }
 
-void ReceberRolo(ApArmazem armaz, pQueue Rolo) {
+int ProcuraCodRoloExpds(ApArmazem armaz, char* codigo) {
+	ApNo tpack, texpd = armaz->guias.head;
+
+	while(!texpd) {
+		tpack = texpd->elem.guia.expds.head;
+		while(!tpack) {
+			if(SearchCodS(&(tpack->elem.pack.pilharolos), codigo)) return 1;
+			tpack = tpack->next;
+		}
+		texpd = texpd->next;
+	}
+	return 0;
+}
+
+int ProcuraCodRoloGuias(ApArmazem armaz, char* codigo) {
+
+}
+
+int ProcuraCodPack(ApArmazem armaz, int codigo) {
+	int pos = 0, lim = SizeL(&(armaz->packs));
+	ApNo pNP = armaz->packs.head;
+
+	while(pos < lim && pNP->elem.pack.codigo != codigo) {
+		pNP = pNP->next;
+		++pos;
+	}
+	if(pos == lim) return -1;
+	return pos;
+}
+
+int ProcuraCodPackExpd(ApLista expd, int codigo) {
+	int pos = 0, lim = SizeL(expd);
+	ApNo pNP = expd->head;
+
+	while(pos < lim && pNP->elem.pack.codigo != codigo) {
+		pNP = pNP->next;
+		++pos;
+	}
+	if(pos == lim) return -1;
+	return pos;
+}
+
+int ProcuraCodPackExpds(ApArmazem armaz, int codigo) {
+	ApNo texpd = armaz->expds.head;
+
+	while(!texpd) {
+		if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
+		texpd = texpd->next;
+	}
+	return 0;
+}
+
+int ProcuraCodPackGuias(ApArmazem armaz, int codigo) {
+	ApNo texpd, tguia = armaz->guias.head;
+
+	while(!tguia) {
+		texpd = tguia->elem.guia.expds.head;
+		while(!texpd) {
+			if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
+			texpd = texpd->next;
+		}
+		tguia = tguia->next;
+	}
+	return 0;
+}
+
+void ReceberRolo(ApArmazem armaz, ApQueue Rolo) {
 	ApNo aux;
 	char str[STRG];
 
@@ -47,11 +110,11 @@ void ReceberRolo(ApArmazem armaz, pQueue Rolo) {
 		aux = malloc(sizeof(No));
 		printf("Adicionar Rolo\n");
 		printf("Introduza a descricao do produto: ");
-		fgets(aux->elem.descr, sizeof(aux->elem.descr), stdin);
-		aux->elem.descr[strlen(aux->elem.descr) - 1] = '\0';
+		fgets(aux->elem.rolo.descr, sizeof(aux->elem.rolo.descr), stdin);
+		aux->elem.rolo.descr[strlen(aux->elem.rolo.descr) - 1] = '\0';
 		printf("Introduza a encomenda do produto: ");
 		fgets(str, sizeof(str), stdin);
-		sscanf(str, "%d", &(aux->elem.enc));
+		sscanf(str, "%d", &(aux->elem.rolo.enc));
 		Enqueue(Rolo, aux);
 		printf("Rolo introduzido com sucesso!\n");
 	}else {
@@ -59,7 +122,7 @@ void ReceberRolo(ApArmazem armaz, pQueue Rolo) {
 	}
 }
 
-void AdRoloArm(ApArmazem armaz, pQueue ap_queue) {
+void AdRoloArm(ApArmazem armaz, ApQueue ap_queue) {
 	ApNo aux;
 	float tmpf;
 	int tmpi;
@@ -67,24 +130,24 @@ void AdRoloArm(ApArmazem armaz, pQueue ap_queue) {
 
 	if(EmptyQ(ap_queue) == 0) {
 		aux = Dequeue(ap_queue);
-		printf("Descricao do rolo: %s ", aux->elem.descr);
-		printf("Encomenda do rolo: %d ", aux->elem.enc);
+		printf("Descricao do rolo: %s ", aux->elem.rolo.descr);
+		printf("Encomenda do rolo: %d ", aux->elem.rolo.enc);
 		printf("Introduza o codigo do Rolo: ");
 		fgets(str, sizeof(str), stdin);
 		str[strlen(str) - 1] = '\0';
 		if(strlen(str) < 11) {
 			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodigoRoloEmPacks(armaz, str) == 0) {
-				strcpy(aux->elem.codigo, str);
+				strcpy(aux->elem.rolo.codigo, str);
 				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
 				sscanf(str, "%f", &tmpf);
 				if(tmpf > 0.0) {
-					aux->elem.comp = tmpf;
+					aux->elem.rolo.comp = tmpf;
 
 					printf("Introduza a qualidade do rolo: ");
 					fgets(str, sizeof(str), stdin);
 					sscanf(str, "%d", &tmpi);
-					aux->elem.qualid = tmpi;
+					aux->elem.rolo.qualid = tmpi;
 
 					armaz->rolosarmazem[armaz->cont_rolos] = aux->elem;
 					++armaz->cont_rolos;

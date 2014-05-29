@@ -51,7 +51,7 @@ void MenuPacks(ApArmazem armaz) {
 		Prima();
 	}while(op != 0);
 }
-void MenuRolos(ApArmazem armaz, pQueue filaEspera) {
+void MenuRolos(ApArmazem armaz, ApQueue filaEspera) {
 	int op;
 	char str[STRG];
 
@@ -92,7 +92,7 @@ void MenuRolos(ApArmazem armaz, pQueue filaEspera) {
 		Prima();
 	}while(op != 0);
 }
-void Menu(ApArmazem armaz, pQueue filaEspera) {
+void Menu(ApArmazem armaz, ApQueue filaEspera) {
 	int op;
 	char str[STRG];
 
@@ -140,9 +140,7 @@ int main(int argc, char** argv) {
 	Armazem armazem;
 	ApArmazem armaz = &armazem;
 	Queue rolos;
-	pQueue ap_rolos = &rolos;
-
-	setbuf(stdout, NULL);
+	ApQueue ap_rolos = &rolos;
 
 	InitArm(armaz);
 	NewQ(ap_rolos);

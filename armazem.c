@@ -51,7 +51,23 @@ int ProcuraCodRoloExpds(ApArmazem armaz, char* codigo) {
 }
 
 int ProcuraCodRoloGuias(ApArmazem armaz, char* codigo) {
+	ApNo tpack, texpd, tguia = armaz->guias.head;
 
+	while(!tguia) {
+		if(tguia->elem.guia.open) {
+			texpd = tguia->elem.guia.expds.head;
+			while(!texpd) {
+				tpack = texpd->elem.expd.packs.head;
+				while(!tpack) {
+					if(SearchCodS(&(tpack->elem.pack.pilharolos), codigo)) return 1;
+					tpack = tpack->next;
+				}
+				texpd = texpd->next;
+			}
+		}
+		tguia = tguia->next;
+	}
+	return 0;
 }
 
 int ProcuraCodPack(ApArmazem armaz, int codigo) {
@@ -92,10 +108,12 @@ int ProcuraCodPackGuias(ApArmazem armaz, int codigo) {
 	ApNo texpd, tguia = armaz->guias.head;
 
 	while(!tguia) {
-		texpd = tguia->elem.guia.expds.head;
-		while(!texpd) {
-			if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
-			texpd = texpd->next;
+		if(tguia->elem.guia.open) {
+			texpd = tguia->elem.guia.expds.head;
+			while(!texpd) {
+				if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
+				texpd = texpd->next;
+			}
 		}
 		tguia = tguia->next;
 	}

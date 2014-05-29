@@ -31,7 +31,7 @@ typedef struct data {
 } Data;
 
 typedef struct guia {
-	int num, cliente;
+	int num, cliente, open;
 	LinkedList expds;
 } Guia;
 

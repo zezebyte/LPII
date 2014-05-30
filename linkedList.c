@@ -33,12 +33,12 @@ void ClearL(ApLista pLL) {
 ApNo DeleteL(ApLista pLL, int pos) {
 	ApNo ApN = NULL, prev;
 	if(pos >= 0 && pos < SizeL(pLL)) {
-		ApN = SetPositionL(pLL, pos);
-		if(pos != 0) {
-			prev = SetPositionL(pLL, pos - 1);
-			prev->next = ApN->next;
-		}else {
+		if((prev = SetPositionL(pLL, pos - 1))) {
+			ApN = prev->next;
 			pLL->head = ApN->next;
+		}else {
+			ApN = SetPositionL(pLL, pos);
+			prev->next = ApN->next;
 		}
 		--(pLL->cont);
 	}
@@ -82,5 +82,4 @@ int ReplaceL(ApLista pLL, ApNo ApN, int pos) {
 	}
 	return 0;
 }
-
 

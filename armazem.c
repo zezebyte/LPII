@@ -662,7 +662,6 @@ void RemoverPackExpds(ApArmazem armaz){
 	}else{
 		printf("Nao existem expedicoes\n");
 	}
-
 }
 
 int daysinmonth(int month, int year) {

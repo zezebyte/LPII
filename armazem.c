@@ -664,6 +664,89 @@ void RemoverPackExpds(ApArmazem armaz){
 	}
 }
 
+void CriarGuia(ApArmazem armaz){
+	ApNo Apguia, aux=armaz->guias.head;
+	char str[STRG];
+	int pos=0;
+
+	printf("Criar Guia");
+	if(EmptyL(&(armaz->guias))==0){
+		while(aux!=NULL && aux->elem.guia.num==-1){
+			pos++;
+			aux=aux->next;
+		}
+		if(aux!=NULL){ //encontrou um no com uma guia anulada
+			Apguia=SetPositionL(&(armaz->guias), pos);
+			printf("Introduza o cliente: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &(Apguia->elem.guia.cliente));
+			Apguia->elem.guia.num=pos+1;
+		}else{
+			Apguia=malloc(sizeof(No));
+			printf("Introduza o cliente: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &(Apguia->elem.guia.cliente));
+			Apguia->elem.guia.num=SizeL(&(armaz->guias))+1;
+			NewL(&(Apguia->elem.guia.expds));
+		}
+		printf("Guia criada com sucesso\n");
+	}
+}
+
+
+void AdicionarExpdGuia(ApArmazem armaz){
+	int codguia, encomenda, posexpd;
+	ApNo ApGuia, ApExp;
+	char str[STRG];
+
+	if(EmptyL(&(armaz->guias))==0){
+		printf("Adicionar expedicao\n");
+		if(EmptyL(&armaz->expds)==0){
+			printf("Digite o codigo da Guia: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &codguia);
+			if(codguia>0){
+				ApGuia=SetPositionL(&(armaz->guias), codguia);
+				if(ApGuia!=NULL){
+					if(ApGuia->elem.guia.open==1){
+						printf("Digite a Encomenda: ");
+						fgets(str, sizeof(str), stdin);
+						sscanf(str, "%d", &encomenda);
+						if(encomenda>0){
+							posexpd=ProcuraEncomenda(armaz, encomenda);
+							if(posexpd!=-1){
+								ApExp=SetPositionL(&(armaz->expds), posexpd);
+								if(ApExp->elem.expd.open==0){
+									InsertL(&(ApGuia->elem.guia.expds), DeleteL(&(armaz->expds), posexpd), SizeL(&(ApGuia->elem.guia.expds)));
+									printf("Expedicao adicionada com sucesso\n");
+								}else{
+									printf("Nao e possivel adicionar, a expedicao nao esta fechada\n");
+								}
+							}else{
+								printf("Expedicao nao encontrada\n");
+							}
+						}else{
+							printf("Encomenda Invalida!");
+						}
+					}else{
+						printf("A guia esta fechada, nao e possivel modifica-la\n");
+					}
+				}else{
+					printf("Guia nao encontrada\n");
+				}
+			}else{
+				printf("Guia Invalida\n");
+			}
+		}else{
+			printf("Ainda nao foram adicionadas expedicoes\n");
+		}
+	}else{
+		printf("Nao existem para adicionar expedicoes\n");
+	}
+}
+
+
+
 int daysinmonth(int month, int year) {
 	int days[] = { 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	days[1] = ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) ? 29 : 28;

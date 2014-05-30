@@ -39,9 +39,9 @@ int ProcuraCodRoloPacks(ApArmazem armaz, char* codigo) {
 int ProcuraCodRoloExpds(ApArmazem armaz, char* codigo) {
 	ApNo tpack, texpd = armaz->guias.head;
 
-	while(!texpd) {
+	while(texpd) {
 		tpack = texpd->elem.guia.expds.head;
-		while(!tpack) {
+		while(tpack) {
 			if(SearchCodS(&(tpack->elem.pack.pilharolos), codigo)) return 1;
 			tpack = tpack->next;
 		}
@@ -53,12 +53,12 @@ int ProcuraCodRoloExpds(ApArmazem armaz, char* codigo) {
 int ProcuraCodRoloGuias(ApArmazem armaz, char* codigo) {
 	ApNo tpack, texpd, tguia = armaz->guias.head;
 
-	while(!tguia) {
+	while(tguia) {
 		if(tguia->elem.guia.open) {
 			texpd = tguia->elem.guia.expds.head;
-			while(!texpd) {
+			while(texpd) {
 				tpack = texpd->elem.expd.packs.head;
-				while(!tpack) {
+				while(tpack) {
 					if(SearchCodS(&(tpack->elem.pack.pilharolos), codigo)) return 1;
 					tpack = tpack->next;
 				}
@@ -97,7 +97,7 @@ int ProcuraCodPackExpd(ApLista expd, int codigo) {
 int ProcuraCodPackExpds(ApArmazem armaz, int codigo) {
 	ApNo texpd = armaz->expds.head;
 
-	while(!texpd) {
+	while(texpd) {
 		if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
 		texpd = texpd->next;
 	}
@@ -107,10 +107,10 @@ int ProcuraCodPackExpds(ApArmazem armaz, int codigo) {
 int ProcuraCodPackGuias(ApArmazem armaz, int codigo) {
 	ApNo texpd, tguia = armaz->guias.head;
 
-	while(!tguia) {
+	while(tguia) {
 		if(tguia->elem.guia.open) {
 			texpd = tguia->elem.guia.expds.head;
-			while(!texpd) {
+			while(texpd) {
 				if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
 				texpd = texpd->next;
 			}
@@ -154,7 +154,8 @@ void AdRoloArm(ApArmazem armaz, ApQueue ap_queue) {
 		fgets(str, sizeof(str), stdin);
 		str[strlen(str) - 1] = '\0';
 		if(strlen(str) < 11) {
-			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodigoRoloEmPacks(armaz, str) == 0 && ProcuraCodRoloGuias(armaz,str)==0) {
+			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodigoRoloEmPacks(armaz, str) == 0 && ProcuraCodRoloGuias(
+				armaz, str) == 0) {
 				strcpy(aux->elem.rolo.codigo, str);
 				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
@@ -187,20 +188,20 @@ void AdRoloArm(ApArmazem armaz, ApQueue ap_queue) {
 
 void RemoverRolo(ApArmazem armaz) {
 	char cod[10];
-	int pos, i;
+	int pos;
 
-	if(EmptyL(&(armaz->rolos)==0){
+	if(EmptyL(&(armaz->rolos)) == 0) {
 		printf("Introduza o codigo do rolo que pretende remover: ");
 		fgets(cod, sizeof(cod), stdin);
 		cod[strlen(cod) - 1] = '\0';
 		pos = ProcuraCodRolo(armaz, cod);
 		if(pos != -1) {
-			free(DeleteL(&(armaz->rolos), pos);
+			free(DeleteL(&(armaz->rolos), pos));
 			printf("Rolo apagado com sucesso!\n");
 		}else {
 			printf("Nao existe um rolo com esse codigo para apagar!\n");
 		}
-	}else{
+	}else {
 		printf("Nao existem rolos para remover!\n");
 	}
 }
@@ -219,12 +220,12 @@ void AlterarRolos(ApArmazem armaz) {
 		if(strlen(str) < 11) {
 			ind = ProcuraCodRolo(armaz, str);
 			if(ind != -1) {
-				ApRolos=SetPositionL(&(armaz->rolos),ind);
+				ApRolos = SetPositionL(&(armaz->rolos), ind);
 				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
 				sscanf(str, "%f", &aux);
 				if(aux > 0.0) {
-					ApRolos->elem.rolo.comp=aux;
+					ApRolos->elem.rolo.comp = aux;
 
 					printf("Introduza a qualidade do rolo: ");
 					fgets(str, sizeof(str), stdin);
@@ -232,7 +233,7 @@ void AlterarRolos(ApArmazem armaz) {
 
 					printf("Introduza a descricao do produto: ");
 					fgets(ApRolos->elem.rolo.descr, sizeof(ApRolos->elem.rolo.descr), stdin);
-					ApRolos->elem.rolo.descr[strlen(ApRolos->elem.rolo.descr)-1]='\0';
+					ApRolos->elem.rolo.descr[strlen(ApRolos->elem.rolo.descr) - 1] = '\0';
 					printf("Introduza a encomenda do produto:");
 					fgets(str, sizeof(str), stdin);
 					sscanf(str, "%d", &(ApRolos->elem.rolo.enc));
@@ -255,15 +256,17 @@ void ListarRolos(ApArmazem armaz) {
 	int i;
 	ApNo pNoLR = armaz->rolos.head;
 	ApNo pNoLP = armaz->packs.head;
+	ApNo pNoLE = armaz->expds.head;
+	ApNo pNoLG = armaz->guias.head;
 
 	if(!EmptyL(&(armaz->rolos))) {
 		printf("Listar rolos do armazem:\n\n");
 		for(i = 0; i < SizeL(&(armaz->rolos)); ++i) {
-			printf("Rolo: %s\n"
-				"Descricao: %s\n"
-				"Comprimento: %f\n"
-				"Qualidade: %d\n"
-				"Emcomenda: %d\n", pNoLR->elem.rolo.codigo, pNoLR->elem.rolo.descr,
+			printf("Rolo %s\n"
+				"\tDescricao: %s\n"
+				"\tComprimento: %f\n"
+				"\tQualidade: %d\n"
+				"\tEmcomenda: %d\n\n", pNoLR->elem.rolo.codigo, pNoLR->elem.rolo.descr,
 				pNoLR->elem.rolo.comp, pNoLR->elem.rolo.qualid, pNoLR->elem.rolo.enc);
 			pNoLR = pNoLR->next;
 		}
@@ -281,6 +284,42 @@ void ListarRolos(ApArmazem armaz) {
 		}
 	}else {
 		printf("Nao existem rolos empilhados.\n");
+	}
+
+	if(EmptyL(&(armaz->expds))) {
+		printf("Listar rolos em expedicoes\n");
+		while(pNoLE) {
+			pNoLP = pNoLE->elem.expd.packs.head;
+			while(pNoLP) {
+				if(!EmptyS(&(pNoLP->elem.pack.pilharolos))) {
+					PrintStack(&(pNoLP->elem.pack.pilharolos));
+				}
+				pNoLP = pNoLP->next;
+			}
+			pNoLE = pNoLE->next;
+		}
+	}else {
+		printf("Nao existem rolos em expedicoes.\n");
+	}
+
+	if(EmptyL(&(armaz->guias))) {
+		printf("Listar rolos em guias de remessa\n");
+		while(pNoLE) {
+			pNoLE = pNoLG->elem.guia.expds.head;
+			while(pNoLE) {
+				pNoLP = pNoLE->elem.expd.packs.head;
+				while(pNoLP) {
+					if(!EmptyS(&(pNoLP->elem.pack.pilharolos))) {
+						PrintStack(&(pNoLP->elem.pack.pilharolos));
+					}
+					pNoLP = pNoLP->next;
+				}
+				pNoLE = pNoLE->next;
+			}
+			pNoLG = pNoLG->next;
+		}
+	}else {
+		printf("Nao existem rolos em expedicoes.\n");
 	}
 }
 
@@ -407,7 +446,7 @@ void ListarPacks(ApArmazem armaz) {
 
 	if(!EmptyL(&(armaz->packs))) {
 		printf("Listar Packs no armazem:\n\n");
-		while(!pNP) {
+		while(pNP) {
 			printf("Codigo do pack: %d", pNP->elem.pack.codigo);
 			printf("Data de criacao: %d/%d/%d", pNP->elem.pack.data.dia, pNP->elem.pack.data.mes,
 				pNP->elem.pack.data.ano);
@@ -420,9 +459,18 @@ void ListarPacks(ApArmazem armaz) {
 
 void ListarPacksExpd(ApLista expd) {
 	ApNo pNE = expd->head;
-	ApNo pNP = pNE->elem.expd.packs.head;
+	ApNo pNP;
 
-
+	while(pNE) {
+		pNP = pNE->elem.expd.packs.head;
+		while(pNP) {
+			printf("Codigo do pack: %d", pNP->elem.pack.codigo);
+			printf("Data de criacao: %d/%d/%d", pNP->elem.pack.data.dia, pNP->elem.pack.data.mes,
+				pNP->elem.pack.data.ano);
+			pNP = pNP->next;
+		}
+		pNE = pNE->next;
+	}
 }
 
 void RemoverPack(ApArmazem armaz) {
@@ -459,6 +507,7 @@ void RemoverPack(ApArmazem armaz) {
 void FecharPack(ApArmazem armaz) {
 	int codpack, pospack;
 	char str[STRG];
+	ApNo pNP;
 
 	printf("Fechar um pack\n");
 	printf("Digite o codigo do pack: ");
@@ -467,8 +516,9 @@ void FecharPack(ApArmazem armaz) {
 	if(codpack > 999999 && codpack <= 9999999) {
 		pospack = ProcuraCodPack(armaz, codpack);
 		if(pospack != -1) {
-			if(armaz->packsarmazem[pospack].open == 1) {
-				armaz->packsarmazem[pospack].open = 0;
+			pNP = SetPositionL(&(armaz->packs), pospack);
+			if(pNP->elem.pack.open == 1) {
+				pNP->elem.pack.open = 0;
 				printf("Pack Fechado com sucesso!\n");
 			}else {
 				printf("O pack ja se encontra fechado!\n");
@@ -478,6 +528,94 @@ void FecharPack(ApArmazem armaz) {
 		}
 	}else {
 		printf("O codigo digitado nao esta correto!\n");
+	}
+}
+
+int ProcuraEncomenda(ApArmazem armaz, int enc) {
+	int pos = 0;
+	ApNo pNE = armaz->expds.head;
+
+	while(pNE && enc != pNE->elem.expd.enc) {
+		++pos;
+		pNE = pNE->next;
+	}
+	if(pNE) {
+		return pos;
+	}else {
+		return -1;
+	}
+}
+
+void CriarExpedicao(ApArmazem armaz) {
+	int enc;
+	ApNo pNE;
+	char str[80];
+
+	printf("Criar expedicao\n");
+	printf("Digite o nro da encomenda: ");
+	fgets(str, sizeof(str), stdin);
+	sscanf(str, "%d", &enc);
+	if(enc > 0) {
+		if(ProcuraEncomenda(armaz, enc) == -1) {
+			pNE = malloc(sizeof(No));
+			pNE->elem.expd.enc = enc;
+			pNE->elem.expd.open = 1;
+			NewL(&(pNE->elem.expd.packs));
+			InsertL(&(armaz->expds), pNE, SizeL(&(armaz->expds)));
+		}
+	}else {
+		printf("Encomenda invalida, tem que ser num nro positivo\n");
+	}
+}
+
+void AdicionarPackExpd(ApArmazem armaz) {
+	int enc, posexpd, pospack, codpack;
+	ApNo pExpd, pPack;
+	char str[80];
+
+	if(!EmptyL(&(armaz->rolos))) {
+		if(!EmptyL(&(armaz->packs))) {
+			printf("Empilhar pack numa expedicao\n");
+			printf("A que encomenda se destina o pack: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &enc);
+			if(enc > 0) {
+				posexpd = ProcuraEncomenda(armaz, enc);
+				if(posexpd != -1) {
+					printf("Pack a empilhar: ");
+					fgets(str, sizeof(str), stdin);
+					sscanf(str, "%d", &codpack);
+					if(codpack > 999999 && codpack <= 9999999) {
+						pospack = ProcuraCodPack(armaz, codpack);
+						pExpd = SetPositionL(&(armaz->expds), posexpd);
+						if(pExpd->elem.expd.open) {
+							pPack = SetPositionL(&(armaz->packs), pospack);
+							if(!pPack->elem.pack.open) {
+								if(pExpd->elem.expd.enc == (TopS(&(pPack->elem.pack.pilharolos))->elem.rolo.enc)) {
+									InsertL(&(pExpd->elem.expd.packs), DeleteL(&(armaz->packs), pospack), SizeL(&(pExpd->elem.expd.packs)));
+								}else {
+									printf("O pack nao tem a mesma encomenda que a expedicao!\n");
+								}
+							}else {
+								printf("O pack ainda nao esta fechado!\n");
+							}
+						}else {
+							printf("A expedicao esta fechada.\n");
+						}
+					}else {
+						printf("O codigo do pacote e invalido!\n");
+					}
+				}else {
+					printf("Nao existe uma expedicao com essa encomenda\n");
+				}
+			}else {
+				printf("Encomenda invalida, tem que ser num nro maior que 0\n");
+			}
+		}else {
+			printf("Nao ha expedicoes criadas!\n");
+		}
+	}else {
+		printf("Nao ha packs para inserir em expedicoes!\n");
 	}
 }
 

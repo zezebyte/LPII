@@ -693,7 +693,6 @@ void CriarGuia(ApArmazem armaz){
 	}
 }
 
-
 void AdicionarExpdGuia(ApArmazem armaz){
 	int codguia, encomenda, posexpd;
 	ApNo ApGuia, ApExp;
@@ -744,8 +743,6 @@ void AdicionarExpdGuia(ApArmazem armaz){
 		printf("Nao existem para adicionar expedicoes\n");
 	}
 }
-
-
 
 int daysinmonth(int month, int year) {
 	int days[] = { 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };

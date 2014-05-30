@@ -32,6 +32,7 @@ typedef struct data {
 
 typedef struct guia {
 	int num, cliente, open;
+	Data data;
 	LinkedList expds;
 } Guia;
 

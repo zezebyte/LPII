@@ -271,7 +271,7 @@ void ListarRolos(ApArmazem armaz) {
 			pNoLR = pNoLR->next;
 		}
 	}else {
-		printf("Nao existem rolos no armazem.\n");
+		printf("Nao existem rolos por empilhar.\n");
 	}
 
 	if(!EmptyL(&(armaz->packs))) {
@@ -346,10 +346,6 @@ void CriarPack(ApArmazem armaz) {
 			switch(cd) {
 			default:
 				printf("Opcao invalida, a introduzir a data automaticamente\n");
-				tpack->elem.pack.data.dia = str_t.wDay;
-				tpack->elem.pack.data.mes = str_t.wMonth;
-				tpack->elem.pack.data.ano = str_t.wYear;
-				break;
 			case 'A':
 				tpack->elem.pack.data.dia = str_t.wDay;
 				tpack->elem.pack.data.mes = str_t.wMonth;
@@ -457,8 +453,8 @@ void ListarPacks(ApArmazem armaz) {
 	}
 }
 
-void ListarPacksExpd(ApLista expd) {
-	ApNo pNE = expd->head;
+void ListarPacksExpds(ApArmazem armaz) {
+	ApNo pNE = armaz->expds.head;
 	ApNo pNP;
 
 	while(pNE) {
@@ -478,7 +474,7 @@ void RemoverPack(ApArmazem armaz) {
 	char str[STRG];
 	ApNo ApNoLP, ApNoLR, apn;
 
-	if(EmptyL(&(armaz->packs))==0){
+	if(EmptyL(&(armaz->packs)) == 0) {
 		printf("Apagar um pack\n");
 		printf("Digite o codigo do pack a remover: ");
 		fgets(str, sizeof(str), stdin);
@@ -486,13 +482,13 @@ void RemoverPack(ApArmazem armaz) {
 		if(codpack > 999999 && codpack <= 9999999) {
 			pospack = ProcuraCodPack(armaz, codpack);
 			if(pospack != -1) {
-				ApNoLR=malloc(sizeof(ApNo));
-				ApNoLP=DeleteL(&(armaz->packs), pospack);
-				while(EmptyS(&(ApNoLP->elem.pack.pilharolos))!=0){
+				ApNoLR = malloc(sizeof(ApNo));
+				ApNoLP = DeleteL(&(armaz->packs), pospack);
+				while(EmptyS(&(ApNoLP->elem.pack.pilharolos)) != 0) {
 					apn = Pop(&(ApNoLP->elem.pack.pilharolos));
-					ApNoLR->elem.rolo=apn->elem.rolo;
+					ApNoLR->elem.rolo = apn->elem.rolo;
 					free(apn);
-					InsertL(&(armaz->rolos), ApNoLR,SizeL(&(armaz->packs)));
+					InsertL(&(armaz->rolos), ApNoLR, SizeL(&(armaz->packs)));
 				}
 				free(ApNoLP);
 				printf("Pack eliminado com sucesso!\n");
@@ -502,7 +498,7 @@ void RemoverPack(ApArmazem armaz) {
 		}else {
 			printf("O codigo inserido esta incorreto!\n");
 		}
-	}else{
+	}else {
 		printf("Nao existem pack para remover!\n");
 	}
 }
@@ -552,7 +548,7 @@ int ProcuraEncomenda(ApArmazem armaz, int enc) {
 void CriarExpedicao(ApArmazem armaz) {
 	int enc;
 	ApNo pNE;
-	char str[80];
+	char str[STRG];
 
 	printf("Criar expedicao\n");
 	printf("Digite o nro da encomenda: ");
@@ -574,7 +570,7 @@ void CriarExpedicao(ApArmazem armaz) {
 void AdicionarPackExpd(ApArmazem armaz) {
 	int enc, posexpd, pospack, codpack;
 	ApNo pExpd, pPack;
-	char str[80];
+	char str[STRG];
 
 	if(!EmptyL(&(armaz->rolos))) {
 		if(!EmptyL(&(armaz->packs))) {
@@ -595,7 +591,9 @@ void AdicionarPackExpd(ApArmazem armaz) {
 							pPack = SetPositionL(&(armaz->packs), pospack);
 							if(!pPack->elem.pack.open) {
 								if(pExpd->elem.expd.enc == (TopS(&(pPack->elem.pack.pilharolos))->elem.rolo.enc)) {
-									InsertL(&(pExpd->elem.expd.packs), DeleteL(&(armaz->packs), pospack), SizeL(&(pExpd->elem.expd.packs)));
+									InsertL(&(pExpd->elem.expd.packs),
+										DeleteL(&(armaz->packs), pospack),
+										SizeL(&(pExpd->elem.expd.packs)));
 								}else {
 									printf("O pack nao tem a mesma encomenda que a expedicao!\n");
 								}
@@ -622,45 +620,212 @@ void AdicionarPackExpd(ApArmazem armaz) {
 	}
 }
 
-void RemoverPackExpds(ApArmazem armaz){
+void RemoverPackExpds(ApArmazem armaz) {
 	int encomenda, posexpd, codpack, pospack;
 	ApNo ApExp;
 	char str[STRG];
 
-	if(EmptyL(&(armaz->expds))==0){
+	if(EmptyL(&(armaz->expds)) == 0) {
 		printf("Introduza a encomenda: ");
 		fgets(str, sizeof(str), stdin);
 		sscanf(str, "%d", &encomenda);
-		if(encomenda>0){
-			posexpd=ProcuraEncomenda(armaz, encomenda);
-			if(posexpd!=-1){
-				ApExp=SetPositionL(&(armaz->expds), posexpd);
-				if(EmptyL((ApLista)&(ApExp->elem.pack))==0){
+		if(encomenda > 0) {
+			posexpd = ProcuraEncomenda(armaz, encomenda);
+			if(posexpd != -1) {
+				ApExp = SetPositionL(&(armaz->expds), posexpd);
+				if(EmptyL((ApLista) &(ApExp->elem.pack)) == 0) {
 					printf("Digite o codigo do pack: ");
 					fgets(str, sizeof(str), stdin);
 					sscanf(str, "%d", &codpack);
-					if(codpack>999999 && codpack<=9999999){
-						pospack=ProcuraCodPackExpd((ApLista)ApExp, codpack);
-						if(pospack!=-1){
-							InsertL(&(armaz->packs), DeleteL(&(ApExp->elem.expd.packs),pospack),SizeL(&(armaz->packs)));
+					if(codpack > 999999 && codpack <= 9999999) {
+						pospack = ProcuraCodPackExpd((ApLista) ApExp, codpack);
+						if(pospack != -1) {
+							InsertL(&(armaz->packs), DeleteL(&(ApExp->elem.expd.packs), pospack),
+								SizeL(&(armaz->packs)));
 							printf("Pack removido com sucesso\n");
-						}else{
+						}else {
 							printf("Esse pack nao existe\n");
 						}
-					}else{
+					}else {
 						printf("Codigo do Pack Incorrecto!\n");
 					}
-				}else{
+				}else {
 					printf("Nao foram inseridos pack nesta expedicao\n");
 				}
-			}else{
+			}else {
 				printf("Essa encomenda nao existe\n");
 			}
-		}else{
-			printf("Encomenda digitada nao esta correta\n")
-	;	}
-	}else{
+		}else {
+			printf("Encomenda digitada nao esta correta\n");
+		}
+	}else {
 		printf("Nao existem expedicoes\n");
+	}
+}
+
+void CriarGuia(ApArmazem armaz){
+	ApNo Apguia, aux=armaz->guias.head;
+	char str[STRG];
+	int pos=0;
+
+	printf("Criar Guia");
+	if(EmptyL(&(armaz->guias))==0){
+		while(aux!=NULL && aux->elem.guia.num==-1){
+			pos++;
+			aux=aux->next;
+		}
+		if(aux!=NULL){ //encontrou um no com uma guia anulada
+			Apguia=SetPositionL(&(armaz->guias), pos);
+			printf("Introduza o cliente: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &(Apguia->elem.guia.cliente));
+			Apguia->elem.guia.num=pos+1;
+		}else{
+			Apguia=malloc(sizeof(No));
+			printf("Introduza o cliente: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &(Apguia->elem.guia.cliente));
+			Apguia->elem.guia.num=SizeL(&(armaz->guias))+1;
+			NewL(&(Apguia->elem.guia.expds));
+		}
+		printf("Guia criada com sucesso\n");
+	}
+}
+
+void ListarExpds(ApArmazem armaz) {
+	ApNo pNE = armaz->expds.head, pNG = armaz->guias.head;
+	if(EmptyL(&(armaz->expds))) {
+		printf("Listar expedicoes: \n\n");
+		while(pNE) {
+			printf("\tEncomenda %d", pNE->elem.expd.enc);
+			printf("\tContem %d packs\n\n", SizeL(&(pNE->elem.expd.packs)));
+			pNE = pNE->next;
+		}
+	}else {
+		printf("Nao existem expedicoes por associar.\n");
+	}
+
+	if(EmptyL(&(armaz->guias))) {
+		printf("Listar expedicoes nas guias: \n\n");
+		while(pNG) {
+			pNE = pNG->elem.guia.expds.head;
+			while(pNE) {
+				printf("\tEncomenda %d", pNE->elem.expd.enc);
+				printf("\tContem %d packs\n\n", SizeL(&(pNE->elem.expd.packs)));
+				pNE = pNE->next;
+			}
+			pNG = pNG->next;
+		}
+	}else {
+		printf("Nao existem expedicoes por associar.\n");
+	}
+}
+
+void AdicionarExpdGuia(ApArmazem armaz){
+	int codguia, encomenda, posexpd;
+	ApNo ApGuia, ApExp;
+	char str[STRG];
+
+	if(EmptyL(&(armaz->guias))==0){
+		printf("Adicionar expedicao\n");
+		if(EmptyL(&armaz->expds)==0){
+			printf("Digite o codigo da Guia: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &codguia);
+			if(codguia>0){
+				ApGuia=SetPositionL(&(armaz->guias), codguia);
+				if(ApGuia!=NULL){
+					if(ApGuia->elem.guia.open==1){
+						printf("Digite a Encomenda: ");
+						fgets(str, sizeof(str), stdin);
+						sscanf(str, "%d", &encomenda);
+						if(encomenda>0){
+							posexpd=ProcuraEncomenda(armaz, encomenda);
+							if(posexpd!=-1){
+								ApExp=SetPositionL(&(armaz->expds), posexpd);
+								if(ApExp->elem.expd.open==0){
+									InsertL(&(ApGuia->elem.guia.expds), DeleteL(&(armaz->expds), posexpd), SizeL(&(ApGuia->elem.guia.expds)));
+									printf("Expedicao adicionada com sucesso\n");
+								}else{
+									printf("Nao e possivel adicionar, a expedicao nao esta fechada\n");
+								}
+							}else{
+								printf("Expedicao nao encontrada\n");
+							}
+						}else{
+							printf("Encomenda Invalida!");
+						}
+					}else{
+						printf("A guia esta fechada, nao e possivel modifica-la\n");
+					}
+				}else{
+					printf("Guia nao encontrada\n");
+				}
+			}else{
+				printf("Guia Invalida\n");
+			}
+		}else{
+			printf("Ainda nao foram adicionadas expedicoes\n");
+		}
+	}else{
+		printf("Nao existem para adicionar expedicoes\n");
+	}
+}
+
+void FecharGuia(ApArmazem armaz) {
+	char str[STRG], cd;
+	int codguia, day, month, year, verif;
+	SYSTEMTIME str_t;
+	GetSystemTime(&str_t);
+	ApNo pNG;
+
+	if(EmptyL(&(armaz->guias))) {
+		printf("Fechar Guia\n");
+		printf("Nro da guia a fechar: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &codguia);
+		if(codguia > 0) {
+			pNG = SetPositionL(&(armaz->guias), codguia - 1);
+			if(pNG) {
+				if(pNG->elem.guia.open) {
+					pNG->elem.guia.open = 0;
+					printf("Data (A)utomatica ou (M)anual: ");
+					fgets(str, sizeof(str), stdin);
+					sscanf(str, "%c", &cd);
+					cd = toupper(cd);
+					switch(cd) {
+					default:
+						printf("Opcao invalida, a introduzir a data automaticamente\n");
+					case 'A':
+						pNG->elem.pack.data.dia = str_t.wDay;
+						pNG->elem.pack.data.mes = str_t.wMonth;
+						pNG->elem.pack.data.ano = str_t.wYear;
+						break;
+					case 'M':
+						do {
+							printf("Data do pacote [dd/mm/yyyy]: ");
+							fgets(str, sizeof(str), stdin);
+							sscanf(str, "%d%c%d%c%d", &day, &cd, &month, &cd, &year);
+							verif = validDate(day, month, year);
+							if(!verif) printf("Data invalida!\n");
+						}while(!verif);
+
+						pNG->elem.pack.data.dia = day;
+						pNG->elem.pack.data.mes = month;
+						pNG->elem.pack.data.ano = year;
+					}
+					printf("Guia fechada com sucesso.\n");
+				}else {
+					printf("A guia ja estava fechada.\n");
+				}
+			}else {
+				printf("Essa guia nao existe.\n");
+			}
+		}else {
+			printf("Codigo da guia incorrecto, tem que ser maior que 0!\n");
+		}
+	}else {
+		printf("Nao existem guias para fechar.\n");
 	}
 }
 

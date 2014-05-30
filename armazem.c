@@ -474,33 +474,36 @@ void ListarPacksExpd(ApLista expd) {
 }
 
 void RemoverPack(ApArmazem armaz) {
-	int codpack, pospack, i;
+	int codpack, pospack;
 	char str[STRG];
-	ApNo apn;
+	ApNo ApNoLP, ApNoLR, apn;
 
-	printf("Apagar um pack\n");
-	printf("Digite o codigo do pack a remover: ");
-	fgets(str, sizeof(str), stdin);
-	sscanf(str, "%d", &codpack);
-	if(codpack > 999999 && codpack <= 9999999) {
-		pospack = ProcuraCodPack(armaz, codpack);
-		if(pospack != -1) {
-			while(!EmptyS(&armaz->packsarmazem[pospack].pilharolos)) {
-				apn = Pop(&(armaz->packsarmazem[pospack].pilharolos));
-				armaz->rolosarmazem[armaz->cont_rolos] = apn->elem;
-				++armaz->cont_rolos;
-				free(apn);
+	if(EmptyL(&(armaz->packs))==0){
+		printf("Apagar um pack\n");
+		printf("Digite o codigo do pack a remover: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &codpack);
+		if(codpack > 999999 && codpack <= 9999999) {
+			pospack = ProcuraCodPack(armaz, codpack);
+			if(pospack != -1) {
+				ApNoLR=malloc(sizeof(ApNo));
+				ApNoLP=DeleteL(&(armaz->packs), pospack);
+				while(EmptyS(&(ApNoLP->elem.pack.pilharolos))!=0){
+					apn = Pop(&(ApNoLP->elem.pack.pilharolos));
+					ApNoLR->elem.rolo=apn->elem.rolo;
+					free(apn);
+					InsertL(&(armaz->rolos), ApNoLR,SizeL(&(armaz->packs)));
+				}
+				free(ApNoLP);
+				printf("Pack eliminado com sucesso!\n");
+			}else {
+				printf("Esse pack nao existe!\n");
 			}
-			--armaz->cont_packs;
-			for(i = pospack; i < armaz->cont_packs; ++i) {
-				armaz->packsarmazem[i] = armaz->packsarmazem[i + 1];
-			}
-			printf("Pack eliminado com sucesso!\n");
 		}else {
-			printf("Esse pack nao existe!\n");
+			printf("O codigo inserido esta incorreto!\n");
 		}
-	}else {
-		printf("O codigo enserido esta incorreto!\n");
+	}else{
+		printf("Nao existem pack para remover!\n");
 	}
 }
 
@@ -617,6 +620,49 @@ void AdicionarPackExpd(ApArmazem armaz) {
 	}else {
 		printf("Nao ha packs para inserir em expedicoes!\n");
 	}
+}
+
+void RemoverPackExpds(ApArmazem armaz){
+	int encomenda, posexpd, codpack, pospack;
+	ApNo ApExp;
+	char str[STRG];
+
+	if(EmptyL(&(armaz->expds))==0){
+		printf("Introduza a encomenda: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &encomenda);
+		if(encomenda>0){
+			posexpd=ProcuraEncomenda(armaz, encomenda);
+			if(posexpd!=-1){
+				ApExp=SetPositionL(&(armaz->expds), posexpd);
+				if(EmptyL((ApLista)&(ApExp->elem.pack))==0){
+					printf("Digite o codigo do pack: ");
+					fgets(str, sizeof(str), stdin);
+					sscanf(str, "%d", &codpack);
+					if(codpack>999999 && codpack<=9999999){
+						pospack=ProcuraCodPackExpd((ApLista)ApExp, codpack);
+						if(pospack!=-1){
+							InsertL(&(armaz->packs), DeleteL(&(ApExp->elem.expd.packs),pospack),SizeL(&(armaz->packs)));
+							printf("Pack removido com sucesso\n");
+						}else{
+							printf("Esse pack nao existe\n");
+						}
+					}else{
+						printf("Codigo do Pack Incorrecto!\n");
+					}
+				}else{
+					printf("Nao foram inseridos pack nesta expedicao\n");
+				}
+			}else{
+				printf("Essa encomenda nao existe\n");
+			}
+		}else{
+			printf("Encomenda digitada nao esta correta\n")
+	;	}
+	}else{
+		printf("Nao existem expedicoes\n");
+	}
+
 }
 
 int daysinmonth(int month, int year) {

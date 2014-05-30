@@ -154,7 +154,7 @@ void AdRoloArm(ApArmazem armaz, ApQueue ap_queue) {
 		fgets(str, sizeof(str), stdin);
 		str[strlen(str) - 1] = '\0';
 		if(strlen(str) < 11) {
-			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodigoRoloEmPacks(armaz, str) == 0) {
+			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodigoRoloEmPacks(armaz, str) == 0 && ProcuraCodRoloGuias(armaz,str)==0) {
 				strcpy(aux->elem.rolo.codigo, str);
 				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
@@ -166,9 +166,6 @@ void AdRoloArm(ApArmazem armaz, ApQueue ap_queue) {
 					fgets(str, sizeof(str), stdin);
 					sscanf(str, "%d", &tmpi);
 					aux->elem.rolo.qualid = tmpi;
-
-					armaz->rolosarmazem[armaz->cont_rolos] = aux->elem;
-					++armaz->cont_rolos;
 					free(aux);
 					printf("Rolo adicionado ao armazem com sucesso\n");
 				}else {
@@ -208,11 +205,12 @@ void RemoverRolo(ApArmazem armaz) {
 }
 
 void AlterarRolos(ApArmazem armaz) {
-	int ind, tmp;
+	int ind;
 	float aux;
+	ApNo ApRolos;
 	char str[STRG];
 
-	if(armaz->cont_rolos != 0) {
+	if(EmptyL(&(armaz->rolos)) == 0) {
 		printf("Alteracao de rolos\t\t*(valor actual)\n\n");
 		printf("Introduza o codigo do rolo a alterar: ");
 		fgets(str, sizeof(str), stdin);
@@ -220,28 +218,23 @@ void AlterarRolos(ApArmazem armaz) {
 		if(strlen(str) < 11) {
 			ind = ProcuraCodRolo(armaz, str);
 			if(ind != -1) {
-				printf("Introduza o comprimento do rolo (%.2f): ", armaz->rolosarmazem[ind].comp);
+				ApRolos=SetPositionL(&(armaz->rolos),ind);
+				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
 				sscanf(str, "%f", &aux);
 				if(aux > 0.0) {
-					armaz->rolosarmazem[ind].comp = aux;
+					ApRolos->elem.rolo.comp=aux;
 
-					printf("Introduza a qualidade do rolo (%d): ", armaz->rolosarmazem[ind].qualid);
+					printf("Introduza a qualidade do rolo: ");
 					fgets(str, sizeof(str), stdin);
-					sscanf(str, "%d", &tmp);
-					armaz->rolosarmazem[ind].qualid = tmp;
+					sscanf(str, "%d", &(ApRolos->elem.rolo.qualid));
 
-					printf("Introduza a descricao do produto (%s): ",
-						armaz->rolosarmazem[ind].descr);
+					printf("Introduza a descricao do produto: ");
+					fgets(ApRolos->elem.rolo.descr, sizeof(ApRolos->elem.rolo.descr), stdin);
+					ApRolos->elem.rolo.descr[strlen(ApRolos->elem.rolo.descr)-1]='\0';
+					printf("Introduza a encomenda do produto:");
 					fgets(str, sizeof(str), stdin);
-					str[strlen(str) - 1] = '\0';
-					strcpy(armaz->rolosarmazem[ind].descr, str);
-
-					printf("Introduza a encomenda do produto (%d): ", armaz->rolosarmazem[ind].enc);
-					fgets(str, sizeof(str), stdin);
-					sscanf(str, "%d", &tmp);
-					armaz->rolosarmazem[ind].enc = tmp;
-
+					sscanf(str, "%d", &(ApRolos->elem.rolo.enc));
 					printf("Rolo editado com sucesso!\n");
 				}else {
 					printf("Os rolos tem de ter comprimento positivo!\n");

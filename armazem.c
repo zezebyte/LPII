@@ -189,18 +189,19 @@ void RemoverRolo(ApArmazem armaz) {
 	char cod[10];
 	int pos, i;
 
-	printf("Introduza o codigo do rolo que pretende remover: ");
-	fgets(cod, sizeof(cod), stdin);
-	cod[strlen(cod) - 1] = '\0';
-	pos = ProcuraCodRolo(armaz, cod);
-	if(pos != -1) {
-		--armaz->cont_rolos;
-		for(i = pos; i < armaz->cont_rolos; ++i) {
-			armaz->rolosarmazem[i] = armaz->rolosarmazem[i + 1];
+	if(EmptyL(&(armaz->rolos)==0){
+		printf("Introduza o codigo do rolo que pretende remover: ");
+		fgets(cod, sizeof(cod), stdin);
+		cod[strlen(cod) - 1] = '\0';
+		pos = ProcuraCodRolo(armaz, cod);
+		if(pos != -1) {
+			free(DeleteL(&(armaz->rolos), pos);
+			printf("Rolo apagado com sucesso!\n");
+		}else {
+			printf("Nao existe um rolo com esse codigo para apagar!\n");
 		}
-		printf("Rolo apagado com sucesso!\n");
-	}else {
-		printf("Nao existe um rolo com esse codigo para apagar!\n");
+	}else{
+		printf("Nao existem rolos para remover!\n");
 	}
 }
 

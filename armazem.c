@@ -520,7 +520,7 @@ void ListarPacks(ApArmazem armaz) {
 void RemoverPack(ApArmazem armaz) {
 	int codpack, pospack;
 	char str[STRG];
-	ApNo ApNoLP, ApNoLR, apn;
+	ApNo ApNoLP;
 
 	if(EmptyL(&(armaz->packs)) == 0) {
 		printf("Apagar um pack\n");
@@ -530,13 +530,9 @@ void RemoverPack(ApArmazem armaz) {
 		if(codpack > 999999 && codpack <= 9999999) {
 			pospack = ProcuraCodPack(armaz, codpack);
 			if(pospack != -1) {
-				ApNoLR = malloc(sizeof(ApNo));
 				ApNoLP = DeleteL(&(armaz->packs), pospack);
 				while(EmptyS(&(ApNoLP->elem.pack.pilharolos)) != 0) {
-					apn = Pop(&(ApNoLP->elem.pack.pilharolos));
-					ApNoLR->elem.rolo = apn->elem.rolo;
-					free(apn);
-					InsertL(&(armaz->rolos), ApNoLR, SizeL(&(armaz->packs)));
+					InsertL(&(armaz->rolos), Pop(&(ApNoLP->elem.pack.pilharolos)), SizeL(&(armaz->packs)));
 				}
 				free(ApNoLP);
 				printf("Pack eliminado com sucesso!\n");

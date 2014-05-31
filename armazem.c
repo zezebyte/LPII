@@ -532,7 +532,8 @@ void RemoverPack(ApArmazem armaz) {
 			if(pospack != -1) {
 				ApNoLP = DeleteL(&(armaz->packs), pospack);
 				while(EmptyS(&(ApNoLP->elem.pack.pilharolos)) != 0) {
-					InsertL(&(armaz->rolos), Pop(&(ApNoLP->elem.pack.pilharolos)), SizeL(&(armaz->packs)));
+					InsertL(&(armaz->rolos), Pop(&(ApNoLP->elem.pack.pilharolos)),
+						SizeL(&(armaz->packs)));
 				}
 				free(ApNoLP);
 				printf("Pack eliminado com sucesso!\n");
@@ -561,11 +562,15 @@ void FecharPack(ApArmazem armaz) {
 			pospack = ProcuraCodPack(armaz, codpack);
 			if(pospack != -1) {
 				pNP = SetPositionL(&(armaz->packs), pospack);
-				if(pNP->elem.pack.open == 1) {
-					pNP->elem.pack.open = 0;
-					printf("Pack Fechado com sucesso!\n");
+				if(!EmptyS(&(pNP->elem.pack.pilharolos))) {
+					if(pNP->elem.pack.open == 1) {
+						pNP->elem.pack.open = 0;
+						printf("Pack Fechado com sucesso.\n");
+					}else {
+						printf("O pack ja se encontra fechado!\n");
+					}
 				}else {
-					printf("O pack ja se encontra fechado!\n");
+					printf("O pack nao tem rolos empilhados, nao pode ser fechado.\n");
 				}
 			}else {
 				printf("O pack nao existe!\n");
@@ -759,11 +764,15 @@ void FecharExpedicao(ApArmazem armaz) {
 			posexpd = ProcuraCodPack(armaz, enc);
 			if(posexpd != -1) {
 				pNE = SetPositionL(&(armaz->packs), posexpd);
-				if(pNE->elem.expd.open == 1) {
-					pNE->elem.expd.open = 0;
-					printf("Expedicao Fechada com sucesso!\n");
+				if(!EmptyL(&(pNE->elem.expd.packs))) {
+					if(pNE->elem.expd.open == 1) {
+						pNE->elem.expd.open = 0;
+						printf("Expedicao Fechada com sucesso!\n");
+					}else {
+						printf("A expedicao ja se encontra fechado!\n");
+					}
 				}else {
-					printf("A expedicao ja se encontra fechado!\n");
+					printf("A expedicao nao contem packs, nao pode ser fechada.\n");
 				}
 			}else {
 				printf("A expedicao nao existe!\n");
@@ -873,36 +882,40 @@ void FecharGuia(ApArmazem armaz) {
 		if(codguia > 0) {
 			pNG = SetPositionL(&(armaz->guias), codguia - 1);
 			if(pNG) {
-				if(pNG->elem.guia.open) {
-					pNG->elem.guia.open = 0;
-					printf("Data (A)utomatica ou (M)anual: ");
-					fgets(str, sizeof(str), stdin);
-					sscanf(str, "%c", &cd);
-					cd = toupper(cd);
-					switch(cd) {
-					default:
-						printf("Opcao invalida, a introduzir a data automaticamente\n");
-					case 'A':
-						pNG->elem.pack.data.dia = str_t.wDay;
-						pNG->elem.pack.data.mes = str_t.wMonth;
-						pNG->elem.pack.data.ano = str_t.wYear;
-						break;
-					case 'M':
-						do {
-							printf("Data do pacote [dd/mm/yyyy]: ");
-							fgets(str, sizeof(str), stdin);
-							sscanf(str, "%d%c%d%c%d", &day, &cd, &month, &cd, &year);
-							verif = validDate(day, month, year);
-							if(!verif) printf("Data invalida!\n");
-						}while(!verif);
+				if(!EmptyL(&(pNG->elem.guia.expds))) {
+					if(pNG->elem.guia.open) {
+						pNG->elem.guia.open = 0;
+						printf("Data (A)utomatica ou (M)anual: ");
+						fgets(str, sizeof(str), stdin);
+						sscanf(str, "%c", &cd);
+						cd = toupper(cd);
+						switch(cd) {
+						default:
+							printf("Opcao invalida, a introduzir a data automaticamente\n");
+						case 'A':
+							pNG->elem.pack.data.dia = str_t.wDay;
+							pNG->elem.pack.data.mes = str_t.wMonth;
+							pNG->elem.pack.data.ano = str_t.wYear;
+							break;
+						case 'M':
+							do {
+								printf("Data do pacote [dd/mm/yyyy]: ");
+								fgets(str, sizeof(str), stdin);
+								sscanf(str, "%d%c%d%c%d", &day, &cd, &month, &cd, &year);
+								verif = validDate(day, month, year);
+								if(!verif) printf("Data invalida!\n");
+							}while(!verif);
 
-						pNG->elem.pack.data.dia = day;
-						pNG->elem.pack.data.mes = month;
-						pNG->elem.pack.data.ano = year;
+							pNG->elem.pack.data.dia = day;
+							pNG->elem.pack.data.mes = month;
+							pNG->elem.pack.data.ano = year;
+						}
+						printf("Guia fechada com sucesso.\n");
+					}else {
+						printf("A guia ja se encontra fechada.\n");
 					}
-					printf("Guia fechada com sucesso.\n");
 				}else {
-					printf("A guia ja se encontra fechada.\n");
+					printf("Guia nao tem expedicoes, nao pode ser fechada.\n");
 				}
 			}else {
 				printf("A guia nao existe.\n");

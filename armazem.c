@@ -785,27 +785,27 @@ void CriarGuia(ApArmazem armaz) {
 	char str[STRG];
 	int pos = 0;
 
-	printf("Criar Guia");
-	if(!EmptyL(&(armaz->guias))) {
-		while(aux != NULL && aux->elem.guia.num == -1) {
-			pos++;
-			aux = aux->next;
-		}
-		if(aux != NULL) {       //encontrou um no com uma guia anulada
-			Apguia = SetPositionL(&(armaz->guias), pos);
-			Apguia->elem.guia.num = pos + 1;
-		}else {
-			Apguia = malloc(sizeof(No));
-			Apguia->elem.guia.num = SizeL(&(armaz->guias)) + 1;
-			NewL(&(Apguia->elem.guia.expds));
-		}
-		printf("Introduza o cliente: ");
-		fgets(str, sizeof(str), stdin);
-		sscanf(str, "%d", &(Apguia->elem.guia.cliente));
+	printf("Criar Guia\n");
 
-		InsertL(&(armaz->guias), Apguia, SizeL(&(armaz->guias)));
-		printf("Guia criada com sucesso\n");
+	while(aux != NULL && aux->elem.guia.num == -1) {
+		pos++;
+		aux = aux->next;
 	}
+	if(aux != NULL) {       //encontrou um no com uma guia anulada
+		Apguia = SetPositionL(&(armaz->guias), pos);
+		Apguia->elem.guia.num = pos + 1;
+	}else {
+		Apguia = malloc(sizeof(No));
+		Apguia->elem.guia.num = SizeL(&(armaz->guias)) + 1;
+		NewL(&(Apguia->elem.guia.expds));
+	}
+	printf("Introduza o cliente: ");
+	fgets(str, sizeof(str), stdin);
+	sscanf(str, "%d", &(Apguia->elem.guia.cliente));
+
+	InsertL(&(armaz->guias), Apguia, SizeL(&(armaz->guias)));
+	printf("Guia criada com sucesso\n");
+
 }
 
 void AdicionarExpdGuia(ApArmazem armaz) {

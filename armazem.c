@@ -650,6 +650,7 @@ void AdicionarPackExpd(ApArmazem armaz) {
 									InsertL(&(pExpd->elem.expd.packs),
 										DeleteL(&(armaz->packs), pospack),
 										SizeL(&(pExpd->elem.expd.packs)));
+										printf("Pack adicionado com sucesso\n");
 								}else {
 									printf("O pack nao tem a mesma encomenda que a expedicao!\n");
 								}

@@ -23,12 +23,9 @@ void ClearQ(ApQueue pQ) {
 int SizeQ(ApQueue pQ) {
 	int i = 0;
 	ApNo pQN = pQ->head;
-	if(pQN != NULL) {
+	while(pQN) {
 		++i;
-		while(pQN->next != pQ->head) {
-			pQN = pQN->next;
-			++i;
-		}
+		pQN = pQN->next;
 	}
 	return i;
 }
@@ -46,12 +43,11 @@ int NewQ(ApQueue pQ) {
 ApNo Dequeue(ApQueue pQ) {
 	ApNo pQN = pQ->head;
 
-	if(pQ->head == pQ->tail) {
-		pQ->head = NULL;
-		pQ->tail = NULL;
-	}else {
+	if(!EmptyQ(pQ)) {
 		pQ->head = pQ->head->next;
-		pQ->tail->next = pQ->head;
+		if(EmptyQ(pQ)) {
+			pQ->tail = NULL;
+		}
 	}
 	return pQN;
 }
@@ -66,7 +62,7 @@ int Enqueue(ApQueue pQ, ApNo x) {
 			pQ->tail->next = x;
 		}
 		pQ->tail = x;
-		pQ->tail->next = pQ->head;
+		x->next = NULL;
 		return 1;
 	}
 }

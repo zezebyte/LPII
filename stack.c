@@ -69,12 +69,12 @@ int SearchCodS(ApStack pS, char* cod) {
 void PrintStack(ApStack pS) {
 	ApNo ApN = pS->top;
 
-	while(ApN != NULL) {
-		printf("Rolo %s\n", ApN->elem.rolo.codigo);
-		printf("Descricao: %s\n", ApN->elem.rolo.descr);
-		printf("Comprimento: %.2f\n", ApN->elem.rolo.comp);
-		printf("Qualidade: %d\n", ApN->elem.rolo.qualid);
-		printf("Encomenda: %d\n\n", ApN->elem.rolo.enc);
+	while(ApN) {
+		printf("    Rolo %s\n", ApN->elem.rolo.codigo);
+		printf("    Descricao: %s\n", ApN->elem.rolo.descr);
+		printf("    Comprimento: %.2f\n", ApN->elem.rolo.comp);
+		printf("    Qualidade: %d\n", ApN->elem.rolo.qualid);
+		printf("    Encomenda: %d\n\n", ApN->elem.rolo.enc);
 		ApN = ApN->next;
 	}
 }

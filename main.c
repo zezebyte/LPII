@@ -6,195 +6,237 @@
 #include "queue.h"
 #include "stack.h"
 
-void menurolos(ApArmazem armaz, ApQueue filaEspera){
-    int op;
-    char str[STRG];
+void menurolos(ApArmazem armaz, ApQueue filaEspera) {
+	int op;
+	ApNo aux;
+	char str[STRG];
 
-    do{
-        limparEcra();
-        printf("Menu Rolos\n"
-               "Escolha por favor uma das seguintes opcoes\n"
-               "1-Remover Rolo do Armazem\n"
-               "2-Alterar informacao de rolo\n"
-               "3-Listar os rolos no armazem\n"
-               "0-Voltar para o menu anterior\n"
-               "Opcao: ");
-        fgets(str, sizeof(str), stdin);
-        sscanf(str, "%d", &op);
-        switch(op){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 0:
-                printf("Voltar ao menu anterior...");
-                Prima();
-                break;
-            default:
-                printf("Erro! Opcao invalida\n");
-        }
-    }while(op!=0);
+	do {
+		aux = filaEspera->head;
+		op = -1;
+		limparEcra();
+		printf("Menu de operacoes em rolos\n");
+		if(!aux) {
+			printf("Nao existem rolos na fila de espera\n");
+		}else {
+			printf("|");
+			while(aux) {
+				printf("%s|", aux->elem.rolo.descr);
+				aux = aux->next;
+			}
+			printf("\n");
+		}
+		printf("  1 - Adicionar rolo ao armazem\n"
+			"  2 - Remover rolo do armazem\n"
+			"  3 - Alterar informacao de rolo\n"
+			"  4 - Listar os rolos no armazem\n"
+			"  0 - Voltar para o menu anterior\n"
+			"Opcao: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &op);
+		limparEcra();
+		switch(op) {
+		case 1:
+			AdRoloArm(armaz, filaEspera);
+			break;
+		case 2:
+			RemoverRolo(armaz);
+			break;
+		case 3:
+			AlterarRolos(armaz);
+			break;
+		case 4:
+			ListarRolos(armaz);
+			break;
+		case 0:
+			printf("Voltar ao menu anterior...");
+			break;
+		default:
+			printf("Erro! Opcao invalida\n");
+		}
+		Prima();
+	}while(op != 0);
 }
 
- void menupacks(ApArmazem armaz){
-    int op;
-    char str[STRG];
+void menupacks(ApArmazem armaz) {
+	int op;
+	char str[STRG];
 
-    do{
-        limparEcra();
-        printf("Menu Packs\n"
-               "Escolha por favor uma das seguintes opcoes\n"
-               "1-Criar Pack\n"
-               "2-Empilhar Rolos num Pack\n"
-               "3-Anular Pack\n"
-               "4-Listar Packs\n"
-               "5-Fechar Pack\n"
-               "0-Voltar para o menu anterior\n"
-               "Opcao: ");
-        fgets(str, sizeof(str), stdin);
-        sscanf(str, "%d", &op);
-        switch(op){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 0:
-                printf("Voltar ao menu anterior...");
-                Prima();
-                break;
-            default:
-                printf("Erro! Opcao invalida\n");
-        }
-    }while(op!=0);
+	do {
+		op = -1;
+		limparEcra();
+		printf("Menu de operacoes em packs\n\n"
+			"  1 - Criar pack\n"
+			"  2 - Empilhar rolos num pack\n"
+			"  3 - Anular pack\n"
+			"  4 - Listar packs\n"
+			"  5 - Fechar pack\n"
+			"  0 - Voltar para o menu anterior\n"
+			"Opcao: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &op);
+		limparEcra();
+		switch(op) {
+		case 1:
+			CriarPack(armaz);
+			break;
+		case 2:
+			AdicionarRoloPack(armaz);
+			break;
+		case 3:
+			RemoverPack(armaz);
+			break;
+		case 4:
+			ListarPacks(armaz);
+			break;
+		case 5:
+			FecharPack(armaz);
+			break;
+		case 0:
+			printf("Voltar ao menu anterior...");
+			break;
+		default:
+			printf("Erro! Opcao invalida\n");
+		}
+		Prima();
+	}while(op != 0);
 }
- void menuexpds(ApArmazem armaz){
-    int op;
-    char str[STRG];
+void menuexpds(ApArmazem armaz) {
+	int op;
+	char str[STRG];
 
-    do{
-        limparEcra();
-        printf("Menu Expedicoes\n"
-               "Escolha por favor uma das seguintes opcoes\n"
-               "1-Criar Expedicao\n"
-               "2-Associar Packs a uma Expedicao\n"
-               "3-Remover Pack de uma Expedicao\n"
-               "4-Listar Expedicoes\n"
-               "5-Fechar Expedicao\n"
-               "0-Voltar para o menu anterior\n"
-               "Opcao: ");
-        fgets(str, sizeof(str), stdin);
-        sscanf(str, "%d", &op);
-        switch(op){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 0:
-                printf("Voltar ao menu anterior...");
-                Prima();
-                break;
-            default:
-                printf("Erro! Opcao invalida\n");
-        }
-    }while(op!=0);
+	do {
+		op = -1;
+		limparEcra();
+		printf("Menu de operacoes em expedicoes\n\n"
+			"  1 - Criar expedicao\n"
+			"  2 - Associar packs a uma expedicao\n"
+			"  3 - Remover pack de uma expedicao\n"
+			"  4 - Listar expedicoes\n"
+			"  5 - Fechar expedicao\n"
+			"  0 - Voltar para o menu anterior\n"
+			"Opcao: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &op);
+		limparEcra();
+		switch(op) {
+		case 1:
+			CriarExpedicao(armaz);
+			break;
+		case 2:
+			AdicionarPackExpd(armaz);
+			break;
+		case 3:
+			RemoverPackExpds(armaz);
+			break;
+		case 4:
+			ListarExpedicoes(armaz);
+			break;
+		case 5:
+			FecharExpedicao(armaz);
+			break;
+		case 0:
+			printf("Voltar ao menu anterior...");
+			break;
+		default:
+			printf("Erro! Opcao invalida\n");
+		}
+		Prima();
+	}while(op != 0);
 }
 
-void menuguias(ApArmazem armaz){
-    int op;
-    char str[STRG];
+void menuguias(ApArmazem armaz) {
+	int op;
+	char str[STRG];
 
-    do{
-        limparEcra();
-        printf("Menu Guias\n"
-               "Escolha por favor uma das seguintes opcoes\n"
-               "1-Criar Guia\n"
-               "2-Associar Expedicoes a Guia de Remessa\n"
-               "3-Anular Guia de Remessa\n"
-               "4-Finalizar Guia de Remessa\n"
-               "5-Listar Guias de Remessa\n"
-               "0-Voltar para o menu anterior\n"
-               "Opcao: ");
-        fgets(str, sizeof(str), stdin);
-        sscanf(str, "%d", &op);
-        switch(op){
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 0:
-                printf("Voltar ao menu anterior...");
-                Prima();
-                break;
-            default:
-                printf("Erro! Opcao invalida\n");
-        }
-    }while(op!=0);
+	do {
+		op = -1;
+		limparEcra();
+		printf("Menu de operacoes em guias\n\n"
+			"  1 - Criar guia\n"
+			"  2 - Associar expedicoes a guia de remessa\n"
+			"  3 - Anular guia de remessa\n"
+			"  4 - Listar guias de remessa\n"
+			"  5 - Finalizar guia de remessa\n"
+			"  0 - Voltar para o menu anterior\n"
+			"Opcao: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &op);
+		limparEcra();
+		switch(op) {
+		case 1:
+			CriarGuia(armaz);
+			break;
+		case 2:
+			AdicionarExpdGuia(armaz);
+			break;
+		case 3:
+			AnularGuia(armaz);
+			break;
+		case 4:
+			ListarGuias(armaz);
+			break;
+		case 5:
+			FecharGuia(armaz);
+			break;
+		case 0:
+			printf("Voltar ao menu anterior...");
+			break;
+		default:
+			printf("Erro! Opcao invalida\n");
+		}
+		Prima();
+	}while(op != 0);
 }
-void menu(ApArmazem armaz, ApQueue filaEspera){
-    int op;
-    char str[STRG];
+void menu(ApArmazem armaz, ApQueue filaEspera) {
+	int op;
+	char str[STRG];
 
-    do{
-        limparEcra();
-        printf("Programa de Gestao de Empresa de Tecidos\n"
-               "Escolha por favor uma das seguintes opcoes\n"
-               "1-Receber Rolos\n"
-               "2-Operacoes com Rolos\n"
-               "3-Operacoes com Packs\n"
-               "4-Expedicoes\n"
-               "5-Guias\n"
-               "0-Voltar para o menu anterior\n"
-               "Opcao: ");
-        fgets(str, sizeof(str), stdin);
-        sscanf(str, "%d", &op);
-        switch(op){
-            case 1:
-
-                break;
-            case 2:
-                menurolos(armaz, filaEspera);
-                Prima();
-                break;
-            case 3:
-                menupacks(armaz);
-                Prima();
-                break;
-            case 4:
-                menuexpds(armaz);
-                Prima();
-                break;
-            case 5:
-                menuguias(armaz);
-                Prima();
-                break;
-            case 0:
-                printf("Saiu do Programa...");
-                Prima();
-                break;
-            default:
-                printf("Erro! Opcao invalida\n");
-        }
-    }while(op!=0);
+	do {
+		op = -1;
+		limparEcra();
+		printf("Programa de Gestao de Empresa de Tecidos\n\n"
+			"  1 - Chegada de rolo ao armazem\n"
+			"  2 - Operacoes em rolos\n"
+			"  3 - Operacoes em packs\n"
+			"  4 - Operacoes em expedicoes\n"
+			"  5 - Operacoes em guias\n"
+			"  0 - Sair do programa\n"
+			"Opcao: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &op);
+		limparEcra();
+		switch(op) {
+		case 1:
+			ReceberRolo(armaz, filaEspera);
+			Prima();
+			break;
+		case 2:
+			menurolos(armaz, filaEspera);
+			break;
+		case 3:
+			menupacks(armaz);
+			break;
+		case 4:
+			menuexpds(armaz);
+			break;
+		case 5:
+			menuguias(armaz);
+			break;
+		case 0:
+			limparEcra();
+			printf("A sair do programa.");
+			sleep(500);
+			printf(".");
+			sleep(500);
+			printf(".");
+			sleep(500);
+			break;
+		default:
+			printf("Erro! Opcao invalida\n");
+			Prima();
+		}
+	}while(op != 0);
 }
 int main(int argc, char** argv) {
 	Armazem armazem;

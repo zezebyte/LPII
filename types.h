@@ -6,6 +6,7 @@
 #define MAXQUEUE 20
 #define MAXLLIST 0
 
+typedef struct guiaslinkedlist* ApGLista;
 typedef struct linkedlist* ApLista;
 typedef struct armazem* ApArmazem;
 typedef struct stack* ApStack;
@@ -25,6 +26,12 @@ typedef struct linkedlist {
 	ApNo head;
 	int cont;
 } LinkedList;
+
+typedef struct guiaslinkedlist {
+	ApNo head;
+	int cont;
+	int proxguia;
+} GuiasLinkedList;
 
 typedef struct data {
 	int dia, mes, ano;
@@ -58,7 +65,7 @@ typedef struct armazem {
 	LinkedList rolos;
 	LinkedList packs;
 	LinkedList expds;
-	LinkedList guias;
+	GuiasLinkedList guias;
 } Armazem;
 
 typedef union componente {

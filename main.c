@@ -5,6 +5,48 @@
 #include "armazem.h"
 #include "queue.h"
 #include "stack.h"
+#include "listagens.h"
+
+void menuconsultas(ApArmazem armaz){
+	int op;
+		char str[STRG];
+
+		do {
+			op = -1;
+			limparEcra();
+			printf("Menu de operacoes em packs\n\n"
+				"  1 - Listar Rolos por codigo\n"
+				"  2 - Listar Conteudo de um Pack\n"
+				"  3 - Metragem de uma Expedicao\n"
+				"  4 - Quantidade de Rolos e Packs dentro de uma Guia\n"
+				"  0 - Voltar para o menu anterior\n"
+				"Opcao: ");
+			fgets(str, sizeof(str), stdin);
+			sscanf(str, "%d", &op);
+			limparEcra();
+			switch(op) {
+			case 1:
+				ListarRoloCod(armaz);
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			case 4:
+
+				break;
+			case 0:
+				printf("Voltar ao menu anterior...");
+				break;
+			default:
+				printf("Erro! Opcao invalida\n");
+			}
+			Prima();
+		}while(op != 0);
+
+}
 
 void menurolos(ApArmazem armaz, ApQueue filaEspera) {
 	int op;
@@ -112,6 +154,7 @@ void menuexpds(ApArmazem armaz) {
 			"  1 - Criar expedicao\n"
 			"  2 - Associar packs a uma expedicao\n"
 			"  3 - Remover pack de uma expedicao\n"
+			"  4 - Anular expedicao\n"
 			"  4 - Listar expedicoes\n"
 			"  5 - Fechar expedicao\n"
 			"  0 - Voltar para o menu anterior\n"
@@ -130,9 +173,12 @@ void menuexpds(ApArmazem armaz) {
 			RemoverPackExpds(armaz);
 			break;
 		case 4:
-			ListarExpedicoes(armaz);
+			RemoverExpedicao(armaz);
 			break;
 		case 5:
+			ListarExpedicoes(armaz);
+			break;
+		case 6:
 			FecharExpedicao(armaz);
 			break;
 		case 0:
@@ -171,7 +217,7 @@ void menuguias(ApArmazem armaz) {
 			AdicionarExpdGuia(armaz);
 			break;
 		case 3:
-			AnularGuia(armaz);
+			RemoverGuia(armaz);
 			break;
 		case 4:
 			ListarGuias(armaz);
@@ -201,6 +247,7 @@ void menu(ApArmazem armaz, ApQueue filaEspera) {
 			"  3 - Operacoes em packs\n"
 			"  4 - Operacoes em expedicoes\n"
 			"  5 - Operacoes em guias\n"
+			"  6 - Consultas\n"
 			"  0 - Sair do programa\n"
 			"Opcao: ");
 		fgets(str, sizeof(str), stdin);
@@ -222,6 +269,9 @@ void menu(ApArmazem armaz, ApQueue filaEspera) {
 			break;
 		case 5:
 			menuguias(armaz);
+			break;
+		case 6:
+			menuconsultas(armaz);
 			break;
 		case 0:
 			limparEcra();

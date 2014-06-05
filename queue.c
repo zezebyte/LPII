@@ -15,7 +15,7 @@ int FullQ(ApQueue pQ) {
 }
 
 void ClearQ(ApQueue pQ) {
-	if(!EmptyQ(pQ)) {
+	while(!EmptyQ(pQ)) {
 		free(Dequeue(pQ));
 	}
 }

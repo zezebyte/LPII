@@ -66,14 +66,20 @@ int SearchCodS(ApStack pS, char* cod) {
 	return 0;       //nao encontrou
 }
 
-void PrintStack(ApStack pS) {
+void PrintStack(ApStack pS, int indent) {
 	ApNo ApN = pS->top;
+	int i;
 
 	while(ApN) {
-		printf("    Rolo %s\n", ApN->elem.rolo.codigo);
+		for(i = 0; i < indent; ++i)printf("  ");
+		printf("  Rolo %s\n", ApN->elem.rolo.codigo);
+		for(i = 0; i < indent; ++i)printf("  ");
 		printf("    Descricao: %s\n", ApN->elem.rolo.descr);
+		for(i = 0; i < indent; ++i)printf("  ");
 		printf("    Comprimento: %.2f\n", ApN->elem.rolo.comp);
+		for(i = 0; i < indent; ++i)printf("  ");
 		printf("    Qualidade: %d\n", ApN->elem.rolo.qualid);
+		for(i = 0; i < indent; ++i)printf("  ");
 		printf("    Encomenda: %d\n\n", ApN->elem.rolo.enc);
 		ApN = ApN->next;
 	}

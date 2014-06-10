@@ -96,21 +96,25 @@ void GravarArmaz(ApArmazem armaz, ApQueue pQ) {
 		fprintf(stderr, "Can't open input file %s!\n", fileQ);
 		exit(1);
 	}
+
 	fr = fopen(fileR, mode);
 	if(!fr) {
 		fprintf(stderr, "Can't open input file %s!\n", fileR);
 		exit(1);
 	}
+
 	fp = fopen(fileP, mode);
 	if(!fp) {
 		fprintf(stderr, "Can't open input file %s!\n", fileP);
 		exit(1);
 	}
+
 	fe = fopen(fileE, mode);
 	if(!fe) {
 		fprintf(stderr, "Can't open input file %s!\n", fileE);
 		exit(1);
 	}
+
 	fg = fopen(fileG, mode);
 	if(!fg) {
 		fprintf(stderr, "Can't open input file %s!\n", fileG);
@@ -142,6 +146,7 @@ void GravarArmaz(ApArmazem armaz, ApQueue pQ) {
 		fwrite(&(save), sizeof(SaveNo), 1, fp);
 		pNoP = pNoP->next;
 	}
+
 	while(pNoE) {
 		pNoP = pNoE->elem.expd.packs.head;
 		while(pNoP) {
@@ -188,6 +193,8 @@ void GravarArmaz(ApArmazem armaz, ApQueue pQ) {
 		fwrite(&(pNoG->elem.guia), sizeof(Guia), 1, fg);
 		pNoG = pNoG->next;
 	}
+
+	printf("Armazem guardado para ficheiros.\n");
 
 	fclose(fq);
 	fclose(fr);
@@ -295,6 +302,8 @@ void LerArmaz(ApArmazem armaz, ApQueue pQ) {
 			}
 		}
 	}
+
+	printf("Armazem restaurado de ficheiros.\n");
 
 	fclose(fq);
 	fclose(fr);

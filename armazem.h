@@ -35,6 +35,7 @@ void ListarExpedicoes(ApArmazem);
 void FecharExpedicao(ApArmazem);
 void RemoverExpedicao(ApArmazem);
 
+int ProcuraGuia(ApArmazem, int);
 void CriarGuia(ApArmazem);
 void AdicionarExpdGuia(ApArmazem);
 void RemoverGuia(ApArmazem);

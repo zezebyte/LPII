@@ -11,6 +11,6 @@ int NewS(ApStack);
 ApNo Pop(ApStack);
 int Push(ApStack, ApNo);
 int SearchCodS(ApStack, char*);
-void PrintStack(ApStack);
+void PrintStack(ApStack, int);
 
 #endif /* STACK_H_ */

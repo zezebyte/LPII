@@ -1,3 +1,8 @@
+#ifdef _WIN32
+#define CLEAR "cmd /c cls"
+#else
+#define CLEAR "clear"
+#endif
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,7 +11,7 @@
 #define MAX 100
 
 void limparEcra() {       //funcao para limpar o ecra
-	system(" cmd /c cls ");
+	system(CLEAR);
 }
 
 void Prima() {       //funcao de espera

@@ -1,5 +1,6 @@
 #include "listagens.h"
 #include "linkedList.h"
+#include "armazem.h"
 #include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +14,7 @@ void ListarRoloCod(ApArmazem armaz) {
 	ApNo pNE = armaz->expds.head;
 	ApNo pNG = armaz->expds.head;
 
-	printf("Introduza o codigo do rolo\n");
+	printf("Introduza o codigo do rolo: ");
 	fgets(codrolo, sizeof(codrolo), stdin);
 	codrolo[strlen(codrolo)-1] = '\0';
 	if(strlen(codrolo) < 11) {
@@ -23,7 +24,7 @@ void ListarRoloCod(ApArmazem armaz) {
 		if(pNR) {
 			printf("O rolo encontra-se na lista de rolos\n\n");
 			printf("Rolo %s\n", codrolo);
-			printf("Conteudo do Rolo\n\n");
+			printf("Conteudo:\n");
 			printf("Descricao: %s\n", pNR->elem.rolo.descr);
 			printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
 			printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
@@ -32,7 +33,7 @@ void ListarRoloCod(ApArmazem armaz) {
 			while(pNP && !encontrou) {
 				pNR = pNP->elem.pack.pilharolos.top;       //primeiro no da stack
 				while(pNR && !encontrou) {       //procura o codigo na lista de rolos
-					if(strcmp(pNR->elem.rolo.codigo, codrolo)) {
+					if(strcmp(pNR->elem.rolo.codigo, codrolo) == 0) {
 						encontrou = 1; //se encontrou coloca a flag a 1, para sair
 					}else {
 						pNR = pNR->next;
@@ -53,7 +54,7 @@ void ListarRoloCod(ApArmazem armaz) {
 					while(pNP && !encontrou){
 						pNR=pNP->elem.pack.pilharolos.top;
 						while(pNR && !encontrou) {
-							if(strcmp(pNR->elem.rolo.codigo, codrolo)) {
+							if(strcmp(pNR->elem.rolo.codigo, codrolo) == 0) {
 								encontrou = 1;
 							}else{
 								pNR = pNR->next;
@@ -79,7 +80,7 @@ void ListarRoloCod(ApArmazem armaz) {
 								while(pNP && !encontrou){
 									pNR = pNP->elem.pack.pilharolos.top;
 									while(pNR && !encontrou){
-										if(strcmp(pNR->elem.rolo.codigo, codrolo)){
+										if(strcmp(pNR->elem.rolo.codigo, codrolo) == 0){
 											encontrou = 1;
 										}else{
 											pNR = pNR->next;
@@ -113,11 +114,13 @@ void ListarRoloCod(ApArmazem armaz) {
 
 void ListarContPack(ApArmazem armaz){
 	char str[80];
-	int codpack;
+	int codpack, encontrou=0;
 	ApNo pNR;
 	ApNo pNP = armaz->packs.head;
+	ApNo pNE = armaz->expds.head;
+	ApNo pNG = armaz->guias.head;
 
-	printf("Introduza o codigo do Pack");
+	printf("Introduza o codigo do Pack: ");
 	fgets(str, sizeof(str), stdin);
 	sscanf(str, "%d", &codpack);
 	if(codpack>999999 && codpack<=9999999){
@@ -126,18 +129,88 @@ void ListarContPack(ApArmazem armaz){
 		}
 		if(pNP){
 			printf("Pack %d:\n", codpack);
-			if(EmptyS(&(pNP->elem.pack.pilharolos))){
+			if(EmptyS(&(pNP->elem.pack.pilharolos))){ //verifica se o pack tem rolos empilhados
 				printf("O pack esta vazio\n");
 			}else{
 				pNR = pNP->elem.pack.pilharolos.top;
 				printf("Qualidade: %d\n", pNR->elem.rolo.qualid);
 				printf("Encomenda: %d\n", pNR->elem.rolo.enc);
-				while(pNP){
-					printf("Rolo %s\n", pNR->elem.rolo.codigo);
-					printf("Conteudo do Rolo\n\n");
-					printf("Descricao: %s", pNR->elem.rolo.descr);
-					printf("Comprimento: %.2f", pNR->elem.rolo.comp);
+				while(pNR){
+					printf("Rolo %s\n\n", pNR->elem.rolo.codigo);
+					printf("Conteudo: \n");
+					printf("Descricao: %s\n", pNR->elem.rolo.descr);
+					printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
 					printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+					pNR = pNR->next;
+				}
+			}
+		}else{
+			while(pNE && !encontrou){
+				pNP = pNE->elem.expd.packs.head;
+				while(pNP && !encontrou) {
+					if(pNP->elem.pack.codigo == codpack){
+						encontrou = 1;
+					}else{
+						pNP = pNP->next;
+					}
+				}
+				pNE = pNE->next;
+			}
+			if(pNP){
+				printf("Pack %d:\n", codpack);
+				if(EmptyS(&(pNP->elem.pack.pilharolos))){ //verifica se o pack tem rolos empilhados
+					printf("O pack esta vazio\n");
+				}else{
+					pNR = pNP->elem.pack.pilharolos.top;
+					printf("Qualidade: %d\n", pNR->elem.rolo.qualid);
+					printf("Encomenda: %d\n", pNR->elem.rolo.enc);
+					while(pNR){
+						printf("Rolo %s\n\n", pNR->elem.rolo.codigo);
+						printf("Conteudo: \n");
+						printf("Descricao: %s\n", pNR->elem.rolo.descr);
+						printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
+						printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+					    pNR = pNR->next;
+					}
+				}
+			}else{
+				while(pNG && !encontrou){
+					if(pNG->elem.guia.open==1){
+						pNE = pNG->elem.guia.expds.head;
+						while(pNE && !encontrou){
+							pNP = pNE->elem.expd.packs.head;
+							while(pNP && !encontrou){
+								if(pNP->elem.pack.codigo == codpack){
+									encontrou = 1;
+								}else{
+									pNP=pNP->next;
+								}
+							}
+							pNE = pNE->next;
+						}
+
+					}
+					pNG = pNG->next;
+				}
+				if(pNP){
+					printf("Pack %d:\n", codpack);
+					if(EmptyS(&(pNP->elem.pack.pilharolos))){ //verifica se o pack tem rolos empilhados
+						printf("O pack esta vazio\n");
+					}else{
+						pNR = pNP->elem.pack.pilharolos.top;
+						printf("Qualidade: %d\n", pNR->elem.rolo.qualid);
+						printf("Encomenda: %d\n", pNR->elem.rolo.enc);
+						while(pNR){
+							printf("Rolo %s\n\n", pNR->elem.rolo.codigo);
+							printf("Conteudo: \n");
+							printf("Descricao: %s\n", pNR->elem.rolo.descr);
+							printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
+							printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+							pNR = pNR->next;
+						}
+					}
+				}else{
+					printf("O pack digitado nao existe\n");
 				}
 			}
 		}
@@ -145,3 +218,119 @@ void ListarContPack(ApArmazem armaz){
 		printf("Codigo do Pack incorreto\n");
 	}
 }
+void MetragemExpd(ApArmazem armaz){
+	char str[80];
+	float metragem=0;
+	int codexpd, encontrou=0;
+	ApNo ApNE = armaz->expds.head;
+	ApNo pNP;
+	ApNo pNR;
+	ApNo pNG = armaz->guias.head;
+
+	printf("Introduza a encomenda: ");
+	fgets(str, sizeof(str), stdin);
+	sscanf(str, "%d", &codexpd);
+	if(codexpd>0){
+		while(ApNE && !encontrou){
+			if(ApNE->elem.expd.enc==codexpd){
+				encontrou=1;
+			}else{
+				ApNE = ApNE->next;
+			}
+		}
+		if(ApNE){
+			if(EmptyL(&(ApNE->elem.expd.packs))){
+				printf("A expedicao esta vazia\n");
+			}else{
+				pNP = ApNE->elem.expd.packs.head;
+				while(pNP){
+					pNR = pNP->elem.pack.pilharolos.top;
+					while(pNR){
+						metragem+=pNR->elem.rolo.comp;
+						pNR = pNR->next;
+					}
+					pNP = pNP->next;
+				}
+			}
+		}else{
+			while(pNG){
+				if(pNG->elem.guia.open){
+					ApNE = pNG->elem.guia.expds.head;
+					while(ApNE && !encontrou){
+						if(ApNE->elem.expd.enc==codexpd){
+							encontrou=1;
+						}else{
+							ApNE=ApNE->next;
+						}
+					}
+				}
+				pNG = pNG->next;
+			}
+			if(ApNE){
+				pNP = ApNE->elem.expd.packs.head;
+				while(pNP){
+					pNR = pNP->elem.pack.pilharolos.top;
+					while(pNR){
+						metragem+=pNR->elem.rolo.comp;
+						pNR=pNR->next;
+					}
+					pNP = pNP->next;
+				}
+			}
+
+		}
+
+		if(encontrou==0){
+			printf("Essa expedicao nao existe\n");
+		}else{
+			if(metragem>0){
+				printf("A metragem da Expedicao : %d e: %.2f", codexpd, metragem);
+			}else{
+				printf("A expedicao esta vazia\n");
+			}
+		}
+	}else{
+		printf("Codigo de encomenda incorreto\n");
+	}
+}
+
+
+void QuantRolosPacksGuia(ApArmazem armaz){
+	char str[80];
+	int codguia, trolos=0, tpacks=0, posguia;
+	ApNo ApGuia;
+	ApNo ApExp;
+	ApNo ApPack;
+
+	if(EmptyL((ApLista) &(armaz->guias))==0){ //verifica se existem guias
+		printf("Digite o numero da guia: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &codguia);
+		if(codguia>0){ //verifica se o codigo da guia é valido
+			posguia=ProcuraGuia(armaz,codguia);
+			if(posguia!=-1){ //verifica se encontrou a guia
+				ApGuia=SetPositionL((ApLista) &(armaz->guias), posguia); //devolve o apontador da guia
+				ApExp=ApGuia->elem.guia.expds.head;//fica com o primeiro no da lista
+				while(ApExp){ //enquanto tiver nos percorre
+					ApPack=ApExp->elem.expd.packs.head; //primeiro no da lista de packs
+					while(ApPack){
+						trolos+=SizeS(&(ApPack->elem.pack.pilharolos));
+						tpacks++;
+						ApPack=ApPack->next; //passa para o no seguinte
+					}
+					ApExp=ApExp->next;
+				}
+				printf("Existem: %d packs e %d rolos na guia\n", tpacks, trolos);
+			}else{
+				printf ("Guia nao encontrada!\n");
+			}
+		}else{
+			printf("Codigo de guia digitado nao e valido\n");
+		}
+
+	}else{
+		printf("Nao existem guias\n");
+	}
+}
+
+

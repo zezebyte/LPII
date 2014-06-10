@@ -30,13 +30,13 @@ void menuconsultas(ApArmazem armaz) {
 			ListarRoloCod(armaz);
 			break;
 		case 2:
-
+			ListarContPack(armaz);
 			break;
 		case 3:
-
+			MetragemExpd(armaz);
 			break;
 		case 4:
-
+			QuantRolosPacksGuia(armaz);
 			break;
 		case 0:
 			printf("Voltar ao menu anterior...");
@@ -280,13 +280,16 @@ void menu(ApArmazem armaz, ApQueue filaEspera) {
 			break;
 		case 7:
 			GravarArmaz(armaz, filaEspera);
+			Prima();
 			break;
 		case 8:
 			LerArmaz(armaz, filaEspera);
+			Prima();
 			break;
 		case 9:
 			Limpa(armaz, filaEspera);
 			printf("Armazem reiniciado.\n");
+			Prima();
 			break;
 		case 0:
 			limparEcra();

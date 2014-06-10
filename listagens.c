@@ -1,11 +1,6 @@
-/*
- * listagens.c
- *
- *  Created on: 05/06/2014
- *      Author: sos
- */
 #include "listagens.h"
 #include "linkedList.h"
+#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,105 +13,103 @@ void ListarRoloCod(ApArmazem armaz) {
 	ApNo pNE = armaz->expds.head;
 	ApNo pNG = armaz->expds.head;
 
-		printf("Introduza o codigo do rolo\n");
-		fgets(codrolo, sizeof(codrolo), stdin);
-		codrolo[strlen(codrolo)-1]='\0';
-		if(strlen(codrolo) < 11) {
-			while(pNR && strcmp(pNR->elem.rolo.codigo, codrolo)) {       //procura o codigo na lista de rolos
-				pNR = pNR->next;
+	printf("Introduza o codigo do rolo\n");
+	fgets(codrolo, sizeof(codrolo), stdin);
+	codrolo[strlen(codrolo)-1] = '\0';
+	if(strlen(codrolo) < 11) {
+		while(pNR && strcmp(pNR->elem.rolo.codigo, codrolo)) {       //procura o codigo na lista de rolos
+			pNR = pNR->next;
+		}
+		if(pNR) {
+			printf("O rolo encontra-se na lista de rolos\n\n");
+			printf("Rolo %s\n", codrolo);
+			printf("Conteudo do Rolo\n\n");
+			printf("Descricao: %s\n", pNR->elem.rolo.descr);
+			printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
+			printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+
+		}else {
+			while(pNP && !encontrou) {
+				pNR = pNP->elem.pack.pilharolos.top;       //primeiro no da stack
+				while(pNR && !encontrou) {       //procura o codigo na lista de rolos
+					if(strcmp(pNR->elem.rolo.codigo, codrolo)) {
+						encontrou = 1; //se encontrou coloca a flag a 1, para sair
+					}else {
+						pNR = pNR->next;
+					}
+				}
+				pNP = pNP->next;
 			}
 			if(pNR) {
-				printf("O rolo encontra-se na lista de rolos\n\n");
+				printf("O rolo encontra-se na lista de packs\n\n");
 				printf("Rolo %s\n", codrolo);
 				printf("Conteudo do Rolo\n\n");
-				printf("Descricao: %s\n", pNR->elem.rolo.descr);
-				printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
+				printf("Descricao: %s", pNR->elem.rolo.descr);
+				printf("Comprimento: %.2f", pNR->elem.rolo.comp);
 				printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
-
 			}else {
-				while(pNP && !encontrou) {
-					pNR = pNP->elem.pack.pilharolos.top;       //primeiro no da stack
-					while(pNR && !encontrou) {       //procura o codigo na lista de rolos
-						if(strcmp(pNR->elem.rolo.codigo, codrolo)) {
-							encontrou = 1; //se encontrou coloca a flag a 1, para sair
-						}else {
-							pNR = pNR->next;
+				while(pNE && !encontrou){ //lista de expedicoes
+					pNP=pNE->elem.expd.packs.head;
+					while(pNP && !encontrou){
+						pNR=pNP->elem.pack.pilharolos.top;
+						while(pNR && !encontrou) {
+							if(strcmp(pNR->elem.rolo.codigo, codrolo)) {
+								encontrou = 1;
+							}else{
+								pNR = pNR->next;
+							}
 						}
+						pNP = pNP->next;
 					}
-					pNP = pNP->next;
+					pNE = pNE->next;
 				}
-				if(pNR) {
-					printf("O rolo encontra-se na lista de packs\n\n");
+				if(pNR){
+					printf("O rolo encontra-se na lista de expedicoes\n\n");
 					printf("Rolo %s\n", codrolo);
 					printf("Conteudo do Rolo\n\n");
 					printf("Descricao: %s", pNR->elem.rolo.descr);
 					printf("Comprimento: %.2f", pNR->elem.rolo.comp);
 					printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
-				}else {
-					while(pNE && !encontrou){ //lista de expedicoes
-						pNP=pNE->elem.expd.packs.head;
-						while(pNP && !encontrou){
-							pNR=pNP->elem.pack.pilharolos.top;
-							while(pNR && !encontrou) {
-								if(strcmp(pNR->elem.rolo.codigo, codrolo)) {
-									encontrou = 1;
-								}else{
-									pNR = pNR->next;
+				}else{
+					while(pNG && !encontrou){
+						if(pNG->elem.guia.open){
+							pNE = pNG->elem.guia.expds.head;
+							while(pNE && !encontrou){
+								pNP = pNE->elem.expd.packs.head;
+								while(pNP && !encontrou){
+									pNR = pNP->elem.pack.pilharolos.top;
+									while(pNR && !encontrou){
+										if(strcmp(pNR->elem.rolo.codigo, codrolo)){
+											encontrou = 1;
+										}else{
+											pNR = pNR->next;
+										}
+									}
+									pNP = pNP->next;
 								}
+								pNE = pNE->next;
 							}
-							pNP = pNP->next;
+
 						}
-						pNE = pNE->next;
+						pNG = pNG->next;
 					}
 					if(pNR){
-						printf("O rolo encontra-se na lista de expedicoes\n\n");
+						printf("O rolo encontra-se na lista de guias\n\n");
 						printf("Rolo %s\n", codrolo);
 						printf("Conteudo do Rolo\n\n");
 						printf("Descricao: %s", pNR->elem.rolo.descr);
 						printf("Comprimento: %.2f", pNR->elem.rolo.comp);
 						printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
 					}else{
-						while(pNG && !encontrou){
-							if(pNG->elem.guia.open){
-								pNE = pNG->elem.guia.expds.head;
-								while(pNE && !encontrou){
-									pNP = pNE->elem.expd.packs.head;
-									while(pNP && !encontrou){
-										pNR = pNP->elem.pack.pilharolos.top;
-										while(pNR && !encontrou){
-											if(strcmp(pNR->elem.rolo.codigo, codrolo)){
-												encontrou = 1;
-											}else{
-												pNR = pNR->next;
-											}
-										}
-										pNP = pNP->next;
-									}
-									pNE = pNE->next;
-								}
-
-							}
-							pNG = pNG->next;
-						}
-						if(pNR){
-							printf("O rolo encontra-se na lista de guias\n\n");
-							printf("Rolo %s\n", codrolo);
-							printf("Conteudo do Rolo\n\n");
-							printf("Descricao: %s", pNR->elem.rolo.descr);
-							printf("Comprimento: %.2f", pNR->elem.rolo.comp);
-							printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
-						}else{
-							printf("O rolo digitado nao existe\n");
-						}
+						printf("O rolo digitado nao existe\n");
 					}
 				}
 			}
-
-		}else {
-			printf("Codigo de Rolo invalido, tem mais de 10 caracteres\n");
 		}
+	}else {
+		printf("Codigo de Rolo invalido, tem mais de 10 caracteres\n");
+	}
 }
-
 
 void ListarContPack(ApArmazem armaz){
 	char str[80];
@@ -150,8 +143,5 @@ void ListarContPack(ApArmazem armaz){
 		}
 	}else{
 		printf("Codigo do Pack incorreto\n");
-
 	}
 }
-
-

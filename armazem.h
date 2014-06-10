@@ -41,8 +41,8 @@ void RemoverGuia(ApArmazem);
 void FecharGuia(ApArmazem);
 void ListarGuias(ApArmazem);
 
+void Limpa(ApArmazem, ApQueue);
 int daysinmonth(int, int);
 int validDate(int, int, int);
-
 
 #endif	/* ARMAZEM_H_ */

@@ -155,8 +155,8 @@ void AdRoloArm(ApArmazem armaz, ApQueue ap_queue) {
 		fgets(str, sizeof(str), stdin);
 		str[strlen(str) - 1] = '\0';
 		if(strlen(str) < 11) {
-			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodRoloPacks(armaz, str) == 0 && ProcuraCodRoloGuias(
-				armaz, str) == 0) {
+			if(ProcuraCodRolo(armaz, str) == -1 && ProcuraCodRoloPacks(armaz, str) == 0 && ProcuraCodRoloExpds(
+				armaz, str) == 0 && ProcuraCodRoloGuias(armaz, str) == 0) {
 				strcpy(aux->elem.rolo.codigo, str);
 				printf("Introduza o comprimento do rolo: ");
 				fgets(str, sizeof(str), stdin);
@@ -1028,6 +1028,45 @@ void ListarGuias(ApArmazem armaz) {
 	}else {
 		printf("Nao ha guias para listar.\n");
 	}
+}
+
+void Limpa(ApArmazem armaz, ApQueue filaRolos) {
+	ApNo pPack = armaz->packs.head;
+	ApNo pExpd = armaz->expds.head;
+	ApNo pGuia = armaz->guias.head;
+
+	while(pPack) {
+		ClearS(&(pPack->elem.pack.pilharolos));
+		pPack = pPack->next;
+	}
+
+	while(pExpd) {
+		pPack = pExpd->elem.expd.packs.head;
+		while(pPack) {
+			ClearS(&(pPack->elem.pack.pilharolos));
+			pPack = pPack->next;
+		}
+		pExpd = pExpd->next;
+	}
+
+	while(pGuia) {
+		pExpd = pGuia->elem.guia.expds.head;
+		while(pExpd) {
+			pPack = pExpd->elem.expd.packs.head;
+			while(pPack) {
+				ClearS(&(pPack->elem.pack.pilharolos));
+				pPack = pPack->next;
+			}
+			pExpd = pExpd->next;
+		}
+		pGuia = pGuia->next;
+	}
+
+	ClearQ(filaRolos);
+	ClearL(&(armaz->rolos));
+	ClearL(&(armaz->packs));
+	ClearL(&(armaz->expds));
+	ClearL((ApLista) &(armaz->guias));
 }
 
 int daysinmonth(int month, int year) {

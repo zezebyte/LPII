@@ -1,51 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "uteis.h"
 #include "armazem.h"
+#include "uteis.h"
+#include "ficheiros.h"
 #include "queue.h"
 #include "stack.h"
 #include "listagens.h"
 
-void menuconsultas(ApArmazem armaz){
+void menuconsultas(ApArmazem armaz) {
 	int op;
-		char str[STRG];
+	char str[STRG];
 
-		do {
-			op = -1;
-			limparEcra();
-			printf("Menu de operacoes em packs\n\n"
-				"  1 - Listar Rolos por codigo\n"
-				"  2 - Listar Conteudo de um Pack\n"
-				"  3 - Metragem de uma Expedicao\n"
-				"  4 - Quantidade de Rolos e Packs dentro de uma Guia\n"
-				"  0 - Voltar para o menu anterior\n"
-				"Opcao: ");
-			fgets(str, sizeof(str), stdin);
-			sscanf(str, "%d", &op);
-			limparEcra();
-			switch(op) {
-			case 1:
-				ListarRoloCod(armaz);
-				break;
-			case 2:
+	do {
+		op = -1;
+		limparEcra();
+		printf("Menu de operacoes em packs\n\n"
+			"  1 - Listar Rolos por codigo\n"
+			"  2 - Listar Conteudo de um Pack\n"
+			"  3 - Metragem de uma Expedicao\n"
+			"  4 - Quantidade de Rolos e Packs dentro de uma Guia\n"
+			"  0 - Voltar para o menu anterior\n"
+			"Opcao: ");
+		fgets(str, sizeof(str), stdin);
+		sscanf(str, "%d", &op);
+		limparEcra();
+		switch(op) {
+		case 1:
+			ListarRoloCod(armaz);
+			break;
+		case 2:
 
-				break;
-			case 3:
+			break;
+		case 3:
 
-				break;
-			case 4:
+			break;
+		case 4:
 
-				break;
-			case 0:
-				printf("Voltar ao menu anterior...");
-				break;
-			default:
-				printf("Erro! Opcao invalida\n");
-			}
-			Prima();
-		}while(op != 0);
-
+			break;
+		case 0:
+			printf("Voltar ao menu anterior...");
+			break;
+		default:
+			printf("Erro! Opcao invalida\n");
+		}
+		Prima();
+	}while(op != 0);
 }
 
 void menurolos(ApArmazem armaz, ApQueue filaEspera) {
@@ -143,6 +143,7 @@ void menupacks(ApArmazem armaz) {
 		Prima();
 	}while(op != 0);
 }
+
 void menuexpds(ApArmazem armaz) {
 	int op;
 	char str[STRG];
@@ -154,9 +155,9 @@ void menuexpds(ApArmazem armaz) {
 			"  1 - Criar expedicao\n"
 			"  2 - Associar packs a uma expedicao\n"
 			"  3 - Remover pack de uma expedicao\n"
-			"  4 - Anular expedicao\n"
 			"  4 - Listar expedicoes\n"
-			"  5 - Fechar expedicao\n"
+			"  5 - Anular expedicao\n"
+			"  6 - Fechar expedicao\n"
 			"  0 - Voltar para o menu anterior\n"
 			"Opcao: ");
 		fgets(str, sizeof(str), stdin);
@@ -173,10 +174,10 @@ void menuexpds(ApArmazem armaz) {
 			RemoverPackExpds(armaz);
 			break;
 		case 4:
-			RemoverExpedicao(armaz);
+			ListarExpedicoes(armaz);
 			break;
 		case 5:
-			ListarExpedicoes(armaz);
+			RemoverExpedicao(armaz);
 			break;
 		case 6:
 			FecharExpedicao(armaz);
@@ -234,6 +235,7 @@ void menuguias(ApArmazem armaz) {
 		Prima();
 	}while(op != 0);
 }
+
 void menu(ApArmazem armaz, ApQueue filaEspera) {
 	int op;
 	char str[STRG];
@@ -248,6 +250,9 @@ void menu(ApArmazem armaz, ApQueue filaEspera) {
 			"  4 - Operacoes em expedicoes\n"
 			"  5 - Operacoes em guias\n"
 			"  6 - Consultas\n"
+			"  7 - Gravar base de dados\n"
+			"  8 - Carregar base de dados\n"
+			"  9 - CLEAR TEST\n"
 			"  0 - Sair do programa\n"
 			"Opcao: ");
 		fgets(str, sizeof(str), stdin);
@@ -273,6 +278,16 @@ void menu(ApArmazem armaz, ApQueue filaEspera) {
 		case 6:
 			menuconsultas(armaz);
 			break;
+		case 7:
+			GravarArmaz(armaz, filaEspera);
+			break;
+		case 8:
+			LerArmaz(armaz, filaEspera);
+			break;
+		case 9:
+			Limpa(armaz, filaEspera);
+			printf("Armazem reiniciado.\n");
+			break;
 		case 0:
 			limparEcra();
 			printf("A sair do programa.");
@@ -288,6 +303,7 @@ void menu(ApArmazem armaz, ApQueue filaEspera) {
 		}
 	}while(op != 0);
 }
+
 int main(int argc, char** argv) {
 	Armazem armazem;
 	ApArmazem armaz = &armazem;

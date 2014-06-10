@@ -80,4 +80,9 @@ typedef struct no {
 	ApNo next;
 } No;
 
+typedef struct saveno {
+	comp no;
+	int code;
+} SaveNo;
+
 #endif	/* TYPES_H_ */

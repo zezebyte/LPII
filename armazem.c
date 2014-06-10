@@ -84,9 +84,9 @@ int ProcuraCodPack(ApArmazem armaz, int codigo) {
 	return pos;
 }
 
-int ProcuraCodPackExpd(ApLista expd, int codigo) {
+int ProcuraCodPackExpd(ApLista packs, int codigo) {
 	int pos = 0;
-	ApNo pNP = expd->head;
+	ApNo pNP = packs->head;
 
 	while(pNP && pNP->elem.pack.codigo != codigo) {
 		pNP = pNP->next;
@@ -100,7 +100,7 @@ int ProcuraCodPackExpds(ApArmazem armaz, int codigo) {
 	ApNo texpd = armaz->expds.head;
 
 	while(texpd) {
-		if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
+		if(ProcuraCodPackExpd(&(texpd->elem.expd.packs), codigo) != -1) return 1;
 		texpd = texpd->next;
 	}
 	return 0;
@@ -113,7 +113,7 @@ int ProcuraCodPackGuias(ApArmazem armaz, int codigo) {
 		if(tguia->elem.guia.open) {
 			texpd = tguia->elem.guia.expds.head;
 			while(texpd) {
-				if(ProcuraCodPackExpd((ApLista) &(texpd->elem.expd), codigo) != -1) return 1;
+				if(ProcuraCodPackExpd(&(texpd->elem.expd.packs), codigo) != -1) return 1;
 				texpd = texpd->next;
 			}
 		}
@@ -642,13 +642,13 @@ void AdicionarPackExpd(ApArmazem armaz) {
 			if(enc > 0) {
 				posexpd = ProcuraEncomenda(armaz, enc);
 				if(posexpd != -1) {
-					printf("Pack a empilhar: ");
-					fgets(str, sizeof(str), stdin);
-					sscanf(str, "%d", &codpack);
-					if(codpack > 999999 && codpack <= 9999999) {
-						pospack = ProcuraCodPack(armaz, codpack);
-						pExpd = SetPositionL(&(armaz->expds), posexpd);
-						if(pExpd->elem.expd.open) {
+					pExpd = SetPositionL(&(armaz->expds), posexpd);
+					if(pExpd->elem.expd.open) {
+						printf("Pack a empilhar: ");
+						fgets(str, sizeof(str), stdin);
+						sscanf(str, "%d", &codpack);
+						if(codpack > 999999 && codpack <= 9999999) {
+							pospack = ProcuraCodPack(armaz, codpack);
 							pPack = SetPositionL(&(armaz->packs), pospack);
 							if(!pPack->elem.pack.open) {
 								if(pExpd->elem.expd.enc == (TopS(&(pPack->elem.pack.pilharolos))->elem.rolo.enc)) {
@@ -663,10 +663,10 @@ void AdicionarPackExpd(ApArmazem armaz) {
 								printf("O pack ainda nao esta fechado!\n");
 							}
 						}else {
-							printf("A expedicao esta fechada.\n");
+							printf("O codigo do pacote e invalido!\n");
 						}
 					}else {
-						printf("O codigo do pacote e invalido!\n");
+						printf("A expedicao esta fechada.\n");
 					}
 				}else {
 					printf("Nao existe uma expedicao com essa encomenda.\n");

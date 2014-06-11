@@ -122,14 +122,13 @@ void ListarContPack(ApArmazem armaz) {
 				printf("O pack esta vazio\n");
 			}else {
 				pNR = pNP->elem.pack.pilharolos.top;
-				printf("Qualidade: %d\n", pNR->elem.rolo.qualid);
-				printf("Encomenda: %d\n", pNR->elem.rolo.enc);
+				printf("  Qualidade: %d\n", pNR->elem.rolo.qualid);
+				printf("  Encomenda: %d\n", pNR->elem.rolo.enc);
 				while(pNR) {
-					printf("Rolo %s\n\n", pNR->elem.rolo.codigo);
-					printf("Conteudo: \n");
-					printf("Descricao: %s\n", pNR->elem.rolo.descr);
-					printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
-					printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+					printf("    Rolo %s\n", pNR->elem.rolo.codigo);
+					printf("      Descricao: %s\n", pNR->elem.rolo.descr);
+					printf("      Comprimento: %.2f\n", pNR->elem.rolo.comp);
+					printf("      Encomenda: %d\n\n", pNR->elem.rolo.qualid);
 					pNR = pNR->next;
 				}
 			}
@@ -151,14 +150,13 @@ void ListarContPack(ApArmazem armaz) {
 					printf("O pack esta vazio\n");
 				}else {
 					pNR = pNP->elem.pack.pilharolos.top;
-					printf("Qualidade: %d\n", pNR->elem.rolo.qualid);
-					printf("Encomenda: %d\n", pNR->elem.rolo.enc);
+					printf("  Qualidade: %d\n", pNR->elem.rolo.qualid);
+					printf("  Encomenda: %d\n", pNR->elem.rolo.enc);
 					while(pNR) {
-						printf("Rolo %s\n\n", pNR->elem.rolo.codigo);
-						printf("Conteudo: \n");
-						printf("Descricao: %s\n", pNR->elem.rolo.descr);
-						printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
-						printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+						printf("    Rolo %s\n\n", pNR->elem.rolo.codigo);
+						printf("      Descricao: %s\n", pNR->elem.rolo.descr);
+						printf("      Comprimento: %.2f\n", pNR->elem.rolo.comp);
+						printf("      Encomenda: %d\n\n", pNR->elem.rolo.qualid);
 						pNR = pNR->next;
 					}
 				}
@@ -187,14 +185,13 @@ void ListarContPack(ApArmazem armaz) {
 						printf("O pack esta vazio\n");
 					}else {
 						pNR = pNP->elem.pack.pilharolos.top;
-						printf("Qualidade: %d\n", pNR->elem.rolo.qualid);
-						printf("Encomenda: %d\n", pNR->elem.rolo.enc);
+						printf("  Qualidade: %d\n", pNR->elem.rolo.qualid);
+						printf("  Encomenda: %d\n", pNR->elem.rolo.enc);
 						while(pNR) {
-							printf("Rolo %s\n\n", pNR->elem.rolo.codigo);
-							printf("Conteudo: \n");
-							printf("Descricao: %s\n", pNR->elem.rolo.descr);
-							printf("Comprimento: %.2f\n", pNR->elem.rolo.comp);
-							printf("Encomenda: %d\n\n", pNR->elem.rolo.qualid);
+							printf("    Rolo %s\n\n", pNR->elem.rolo.codigo);
+							printf("      Descricao: %s\n", pNR->elem.rolo.descr);
+							printf("      Comprimento: %.2f\n", pNR->elem.rolo.comp);
+							printf("      Encomenda: %d\n\n", pNR->elem.rolo.qualid);
 							pNR = pNR->next;
 						}
 					}
@@ -209,9 +206,9 @@ void ListarContPack(ApArmazem armaz) {
 }
 void MetragemExpd(ApArmazem armaz) {
 	char str[80];
-	float metragem = 0;
+	float metragem = 0.0;
 	int codexpd, encontrou = 0;
-	ApNo ApNE = armaz->expds.head;
+	ApNo pNE = armaz->expds.head;
 	ApNo pNP;
 	ApNo pNR;
 	ApNo pNG = armaz->guias.head;
@@ -220,18 +217,18 @@ void MetragemExpd(ApArmazem armaz) {
 	fgets(str, sizeof(str), stdin);
 	sscanf(str, "%d", &codexpd);
 	if(codexpd > 0) {
-		while(ApNE && !encontrou) {
-			if(ApNE->elem.expd.enc == codexpd) {
+		while(pNE && !encontrou) {
+			if(pNE->elem.expd.enc == codexpd) {
 				encontrou = 1;
 			}else {
-				ApNE = ApNE->next;
+				pNE = pNE->next;
 			}
 		}
-		if(ApNE) {
-			if(EmptyL(&(ApNE->elem.expd.packs))) {
+		if(pNE) {
+			if(EmptyL(&(pNE->elem.expd.packs))) {
 				printf("A expedicao esta vazia\n");
 			}else {
-				pNP = ApNE->elem.expd.packs.head;
+				pNP = pNE->elem.expd.packs.head;
 				while(pNP) {
 					pNR = pNP->elem.pack.pilharolos.top;
 					while(pNR) {
@@ -244,19 +241,19 @@ void MetragemExpd(ApArmazem armaz) {
 		}else {
 			while(pNG) {
 				if(pNG->elem.guia.open) {
-					ApNE = pNG->elem.guia.expds.head;
-					while(ApNE && !encontrou) {
-						if(ApNE->elem.expd.enc == codexpd) {
+					pNE = pNG->elem.guia.expds.head;
+					while(pNE && !encontrou) {
+						if(pNE->elem.expd.enc == codexpd) {
 							encontrou = 1;
 						}else {
-							ApNE = ApNE->next;
+							pNE = pNE->next;
 						}
 					}
 				}
 				pNG = pNG->next;
 			}
-			if(ApNE) {
-				pNP = ApNE->elem.expd.packs.head;
+			if(pNE) {
+				pNP = pNE->elem.expd.packs.head;
 				while(pNP) {
 					pNR = pNP->elem.pack.pilharolos.top;
 					while(pNR) {

@@ -941,9 +941,9 @@ void FecharGuia(ApArmazem armaz) {
 							printf("Opcao invalida, a introduzir a data automaticamente\n");
 							/* no break */
 						case 'A':
-							pNG->elem.pack.data.dia = str_t.wDay;
-							pNG->elem.pack.data.mes = str_t.wMonth;
-							pNG->elem.pack.data.ano = str_t.wYear;
+							pNG->elem.guia.data.dia = str_t.wDay;
+							pNG->elem.guia.data.mes = str_t.wMonth;
+							pNG->elem.guia.data.ano = str_t.wYear;
 							break;
 						case 'M':
 							do {
@@ -954,9 +954,9 @@ void FecharGuia(ApArmazem armaz) {
 								if(!verif) printf("Data invalida!\n");
 							}while(!verif);
 
-							pNG->elem.pack.data.dia = day;
-							pNG->elem.pack.data.mes = month;
-							pNG->elem.pack.data.ano = year;
+							pNG->elem.guia.data.dia = day;
+							pNG->elem.guia.data.mes = month;
+							pNG->elem.guia.data.ano = year;
 						}
 						printf("Guia fechada com sucesso.\n");
 					}else {
@@ -1014,11 +1014,12 @@ void RemoverGuia(ApArmazem armaz) {
 void ListarGuias(ApArmazem armaz) {
 	ApNo pNG = armaz->guias.head;
 
-	if(!EmptyL((ApLista) &(armaz->guias))) {
+	if(pNG) {
 		printf("Listar guias:\n\n");
 		while(pNG) {
 			printf("Guia nro: %d\n"
 				"Cliente destino: %d\n", pNG->elem.guia.num, pNG->elem.guia.cliente);
+			printf("Contem %d expedicoes\n", SizeL(&(pNG->elem.guia.expds)));
 			if(!pNG->elem.guia.open) {
 				printf("Data de emicao: %d/%d/%d\n", pNG->elem.guia.data.dia,
 					pNG->elem.guia.data.mes, pNG->elem.guia.data.ano);

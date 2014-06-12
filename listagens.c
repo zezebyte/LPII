@@ -25,7 +25,7 @@ void ListarRoloCod(ApArmazem armaz) {
 			printf("O rolo encontra-se na lista de rolos\n\n");
 			printf("Rolo %s\n", codrolo);
 			printf("  Descricao: %s\n", pNR->elem.rolo.descr);
-			printf("  Comprimento: %.2f\n\n", pNR->elem.rolo.comp);
+			printf("  Comprimento: %.2f\n", pNR->elem.rolo.comp);
 			printf("  Encomenda: %d\n\n", pNR->elem.rolo.qualid);
 
 		}else {

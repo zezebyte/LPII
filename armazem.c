@@ -39,10 +39,10 @@ int ProcuraCodRoloPacks(ApArmazem armaz, char* codigo) {
 }
 
 int ProcuraCodRoloExpds(ApArmazem armaz, char* codigo) {
-	ApNo tpack, texpd = armaz->guias.head;
+	ApNo tpack, texpd = armaz->expds.head;
 
 	while(texpd) {
-		tpack = texpd->elem.guia.expds.head;
+		tpack = texpd->elem.expd.packs.head;
 		while(tpack) {
 			if(SearchCodS(&(tpack->elem.pack.pilharolos), codigo)) return 1;
 			tpack = tpack->next;
